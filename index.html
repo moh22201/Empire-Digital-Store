@@ -992,11 +992,173 @@ message("🗑️ تم حذف المنتج.");
 }
 
 
-function checkout(){
+async function checkout(){
+
+if(cart.length===0){
+
+message("🛒 السلة فارغة.");
+
+return;
+
+}
+
+/*
+نبدأ بالدفع لمنتج واحد في كل عملية.
+بعد نجاح الاختبار سنضيف شراء عدة منتجات في فاتورة واحدة.
+*/
+
+if(cart.length>1){
+
+message("💡 للدفع الآن اختر منتجًا واحدًا فقط.");
+
+return;
+
+}
+
+const productId=cart[0];
+
+const product=products.find(
+p=>p.id===productId
+);
+
+if(!product){
+
+message("❌ المنتج غير موجود.");
+
+return;
+
+}
+
+/*
+تحويل ID المتجر إلى ID الموجود في Supabase
+*/
+
+const backendIds={
+1:"design-pack",
+2:"social-pack",
+3:"business-pack",
+4:"digital-tools"
+};
+
+const backendProductId=
+backendIds[product.id];
+
+if(!backendProductId){
+
+message("❌ خطأ في المنتج.");
+
+return;
+
+}
+
+message("⏳ جاري تجهيز فاتورة الدفع...");
+
+try{
+
+const response=await fetch(
+"https://glgkwcrwytuajlakgawi.supabase.co/functions/v1/smooth-api",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+productId:backendProductId
+})
+
+}
+);
+
+const data=await response.json();
+
+if(!response.ok || !data.success){
+
+throw new Error(
+data.error || "فشل إنشاء الفاتورة"
+);
+
+}
+
+if(!data.invoiceLink){
+
+throw new Error(
+"لم يتم الحصول على رابط الدفع"
+);
+
+}
+
+/*
+فتح نافذة Telegram Stars
+*/
+
+if(tg && typeof tg.openInvoice==="function"){
+
+tg.openInvoice(
+data.invoiceLink,
+(status)=>{
+
+if(status==="paid"){
+
+cart=[];
+
+saveCart();
+
+renderCart();
 
 message(
-"💳 الدفع بـ Telegram Stars سنفعّله في المرحلة القادمة."
+"🎉 تم الدفع بنجاح! ⭐"
 );
+
+}
+
+else if(status==="cancelled"){
+
+message(
+"تم إلغاء عملية الدفع."
+);
+
+}
+
+else if(status==="failed"){
+
+message(
+"❌ فشل الدفع. حاول مرة أخرى."
+);
+
+}
+
+else if(status==="pending"){
+
+message(
+"⏳ الدفع قيد المعالجة."
+);
+
+}
+
+}
+);
+
+}else{
+
+message(
+"⚠️ يجب فتح المتجر من داخل Telegram."
+);
+
+}
+
+}catch(error){
+
+console.error(error);
+
+message(
+"❌ حدث خطأ أثناء إنشاء الفاتورة."
+);
+
+}
+
+}
 
 }
 
