@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>Empire Digital</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  margin:0;
+  background:#080b10;
+  color:#fff;
+  font-family:Tahoma,Arial,sans-serif;
+}
+
+.app{
+  max-width:600px;
+  min-height:100vh;
+  margin:auto;
+  background:
+    radial-gradient(circle at top,#252033 0,#10131b 38%,#080b10 100%);
+}
+
+/* HEADER */
+
+header{
+  padding:20px 16px 16px;
+  border-bottom:1px solid #302d3d;
+  background:#0c0f16ee;
+  position:sticky;
+  top:0;
+  z-index:20;
+  backdrop-filter:blur(12px);
+}
+
+.logo{
+  font-size:24px;
+  font-weight:900;
+  color:#f2c75c;
+}
+
+.sub{
+  margin-top:5px;
+  color:#a9adb8;
+  font-size:12px;
+}
+
+/* HERO */
+
+.hero{
+  margin:16px;
+  padding:22px 18px;
+  border-radius:20px;
+  background:
+    linear-gradient(135deg,#302747,#171522);
+  border:1px solid #504263;
+  box-shadow:0 10px 30px #0007;
+}
+
+.hero h1{
+  margin:0;
+  font-size:23px;
+}
+
+.hero p{
+  color:#bfc0c9;
+  font-size:13px;
+  line-height:1.7;
+  margin:10px 0 15px;
+}
+
+.hero button{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:12px;
+  background:linear-gradient(135deg,#f3cf68,#b98228);
+  color:#17120a;
+  font-weight:900;
+  font-size:14px;
+}
+
+/* SECTION */
+
+section{
+  padding:0 16px 18px;
+}
+
+.title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:11px;
+}
+
+.title h2{
+  font-size:17px;
+  margin:0;
+}
+
+.title span{
+  font-size:11px;
+  color:#a6a9b4;
+}
+
+/* PRODUCTS */
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.product{
+  background:#151922;
+  border:1px solid #303441;
+  border-radius:16px;
+  padding:10px;
+  overflow:hidden;
+}
+
+.product-img{
+  height:110px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  background:
+    linear-gradient(135deg,#27203c,#171a24);
+  border:1px solid #3b334d;
+}
+
+.product h3{
+  font-size:13px;
+  margin:10px 2px 5px;
+}
+
+.product p{
+  margin:0 2px 9px;
+  color:#9296a4;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.price{
+  color:#f2cb62;
+  font-size:15px;
+  font-weight:bold;
+}
+
+.buy{
+  width:100%;
+  margin-top:8px;
+  padding:9px;
+  border:1px solid #70582c;
+  border-radius:9px;
+  background:#211c12;
+  color:#f2cb62;
+  font-weight:bold;
+}
+
+/* CATEGORIES */
+
+.categories{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding-bottom:5px;
+}
+
+.category{
+  white-space:nowrap;
+  padding:9px 13px;
+  border-radius:20px;
+  background:#171b24;
+  border:1px solid #303541;
+  color:#c9cbd2;
+  font-size:11px;
+}
+
+/* BOTTOM */
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:600px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  background:#0d1017f5;
+  border-top:1px solid #292d37;
+  backdrop-filter:blur(12px);
+  z-index:30;
+}
+
+.bottom button{
+  padding:10px 3px 9px;
+  border:0;
+  background:none;
+  color:#858a98;
+  font-size:10px;
+}
+
+.bottom button.active{
+  color:#f1c95f;
+}
+
+.bottom b{
+  display:block;
+  font-size:19px;
+  margin-bottom:3px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:78px;
+  transform:translateX(-50%) translateY(20px);
+  width:calc(100% - 32px);
+  max-width:500px;
+  padding:13px;
+  border-radius:12px;
+  background:#242934;
+  border:1px solid #464c59;
+  text-align:center;
+  font-size:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:50;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+.spacer{
+  height:75px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+  <div class="logo">👑 Empire Digital</div>
+  <div class="sub">متجرك الرقمي داخل Telegram</div>
+</header>
+
+<div class="hero">
+  <h1>🔥 منتجات رقمية مميزة</h1>
+
+  <p>
+    تصاميم وقوالب وأدوات رقمية جاهزة.
+    اشترِ منتجك واحصل عليه مباشرة.
+  </p>
+
+  <button onclick="scrollProducts()">
+    🛍️ تصفح المنتجات
+  </button>
+</div>
+
+<section>
+
+<div class="title">
+  <h2>التصنيفات</h2>
+</div>
+
+<div class="categories">
+
+<div class="category">🔥 الأكثر مبيعًا</div>
+<div class="category">🎨 تصاميم</div>
+<div class="category">📱 سوشيال ميديا</div>
+<div class="category">💼 أعمال</div>
+<div class="category">🤖 أدوات</div>
+
+</div>
+
+</section>
+
+<section id="products">
+
+<div class="title">
+  <h2>🔥 منتجاتنا</h2>
+  <span>جديد</span>
+</div>
+
+<div class="products">
+
+<!-- المنتج 1 -->
+
+<div class="product">
+
+<div class="product-img">
+🎨
+</div>
+
+<h3>حزمة تصاميم إعلانية</h3>
+
+<p>
+20 تصميمًا احترافيًا للإعلانات والمنشورات.
+</p>
+
+<div class="price">⭐ 100</div>
+
+<button class="buy" onclick="buyProduct('حزمة تصاميم إعلانية')">
+شراء
+</button>
+
+</div>
+
+
+<!-- المنتج 2 -->
+
+<div class="product">
+
+<div class="product-img">
+📱
+</div>
+
+<h3>حزمة Social Media</h3>
+
+<p>
+قوالب جاهزة لمنشورات Facebook وInstagram.
+</p>
+
+<div class="price">⭐ 100</div>
+
+<button class="buy" onclick="buyProduct('حزمة Social Media')">
+شراء
+</button>
+
+</div>
+
+
+<!-- المنتج 3 -->
+
+<div class="product">
+
+<div class="product-img">
+💼
+</div>
+
+<h3>حزمة الأعمال</h3>
+
+<p>
+CV وفواتير وعروض أسعار وقوالب أعمال.
+</p>
+
+<div class="price">⭐ 150</div>
+
+<button class="buy" onclick="buyProduct('حزمة الأعمال')">
+شراء
+</button>
+
+</div>
+
+
+<!-- المنتج 4 -->
+
+<div class="product">
+
+<div class="product-img">
+🤖
+</div>
+
+<h3>حزمة الأدوات الرقمية</h3>
+
+<p>
+أدوات وحاسبات مفيدة لأصحاب الأعمال.
+</p>
+
+<div class="price">⭐ 150</div>
+
+<button class="buy" onclick="buyProduct('حزمة الأدوات الرقمية')">
+شراء
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<div class="title">
+  <h2>👑 VIP</h2>
+</div>
+
+<div class="hero" style="margin:0">
+
+<h2 style="margin:0;color:#f2c75c">
+👑 Empire VIP
+</h2>
+
+<p>
+وصول إلى جميع المنتجات الحالية
+والمنتجات الجديدة التي ستضاف لاحقًا.
+</p>
+
+<button onclick="vip()">
+⭐ الاشتراك في VIP
+</button>
+
+</div>
+
+</section>
+
+<div class="spacer"></div>
+
+</div>
+
+
+<!-- NAVIGATION -->
+
+<div class="bottom">
+
+<button class="active" onclick="home()">
+<b>🏠</b>
+الرئيسية
+</button>
+
+<button onclick="scrollProducts()">
+<b>🛍️</b>
+المتجر
+</button>
+
+<button onclick="vip()">
+<b>👑</b>
+VIP
+</button>
+
+<button onclick="account()">
+<b>👤</b>
+حسابي
+</button>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+const tg = window.Telegram?.WebApp;
+
+if(tg){
+  tg.ready();
+  tg.expand();
+}
+
+
+/* TOAST */
+
+function message(text){
+
+  const toast=document.getElementById("toast");
+
+  toast.textContent=text;
+  toast.classList.add("show");
+
+  setTimeout(()=>{
+    toast.classList.remove("show");
+  },2200);
+
+}
+
+
+/* PRODUCTS */
+
+function scrollProducts(){
+
+  document.getElementById("products")
+  .scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+
+function buyProduct(name){
+
+  message(
+    "🛒 اخترت: "+name+
+    " — نظام الدفع سنضيفه في المرحلة القادمة."
+  );
+
+}
+
+
+function vip(){
+
+  message(
+    "👑 نظام Empire VIP سنفعّله بعد تجهيز الدفع."
+  );
+
+}
+
+
+function account(){
+
+  if(tg?.initDataUnsafe?.user){
+
+    const user=tg.initDataUnsafe.user;
+
+    message(
+      "👤 مرحبًا "+(user.first_name||"بك")
+    );
+
+  }else{
+
+    message(
+      "👤 حسابك سيظهر هنا بعد تشغيل المتجر داخل Telegram."
+    );
+
+  }
+
+}
+
+
+function home(){
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+</script>
+
+</body>
+</html>
