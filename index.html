@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>Empire Digital</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+*{
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+body{
+margin:0;
+background:#07090e;
+color:#fff;
+font-family:Tahoma,Arial,sans-serif;
+}
+
+.app{
+max-width:600px;
+min-height:100vh;
+margin:auto;
+background:linear-gradient(180deg,#171322,#080b10 45%);
+padding-bottom:75px;
+}
+
+/* HEADER */
+
+header{
+padding:17px 15px;
+background:#0c0e14f2;
+border-bottom:1px solid #302b3b;
+position:sticky;
+top:0;
+z-index:20;
+backdrop-filter:blur(12px);
+}
+
+.top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.logo{
+font-size:23px;
+font-weight:900;
+color:#f2c75c;
+}
+
+.cart{
+background:#1c1827;
+border:1px solid #514264;
+border-radius:10px;
+padding:8px 11px;
+font-size:16px;
+}
+
+/* SEARCH */
+
+.search{
+margin-top:13px;
+display:flex;
+gap:7px;
+}
+
+.search input{
+width:100%;
+background:#171a23;
+border:1px solid #353947;
+border-radius:11px;
+padding:11px;
+color:white;
+outline:none;
+font-size:12px;
+}
+
+.search button{
+width:45px;
+border:1px solid #70582c;
+background:#211b12;
+color:#f2ca62;
+border-radius:11px;
+}
+
+/* HERO */
+
+.hero{
+margin:15px;
+padding:20px;
+border-radius:19px;
+border:1px solid #4c3e5d;
+background:linear-gradient(135deg,#302647,#15151f);
+}
+
+.hero h1{
+margin:0;
+font-size:22px;
+}
+
+.hero p{
+color:#b8bac5;
+font-size:12px;
+line-height:1.7;
+margin:9px 0 15px;
+}
+
+.hero button,
+.primary{
+width:100%;
+border:0;
+border-radius:11px;
+padding:12px;
+background:linear-gradient(135deg,#f3d16d,#b47d25);
+color:#151008;
+font-weight:900;
+}
+
+/* SECTIONS */
+
+section{
+padding:0 15px 17px;
+}
+
+.section-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.section-head h2{
+font-size:16px;
+margin:0;
+}
+
+.section-head span{
+font-size:10px;
+color:#9195a1;
+}
+
+/* CATEGORIES */
+
+.categories{
+display:flex;
+gap:7px;
+overflow-x:auto;
+padding-bottom:4px;
+}
+
+.category{
+white-space:nowrap;
+padding:8px 13px;
+border-radius:20px;
+background:#171a22;
+border:1px solid #323642;
+color:#bfc2ca;
+font-size:11px;
+}
+
+.category.active{
+background:#302717;
+border-color:#8a692e;
+color:#f3ce68;
+}
+
+/* PRODUCTS */
+
+.products{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.product{
+background:#151821;
+border:1px solid #303440;
+border-radius:15px;
+padding:9px;
+}
+
+.product-img{
+height:105px;
+border-radius:11px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:43px;
+background:linear-gradient(135deg,#29203d,#181a23);
+border:1px solid #3b334c;
+}
+
+.product h3{
+font-size:12px;
+margin:9px 2px 5px;
+}
+
+.product p{
+font-size:10px;
+line-height:1.5;
+color:#8f94a2;
+height:31px;
+margin:0 2px 8px;
+}
+
+.product-bottom{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.price{
+color:#f2ca61;
+font-weight:bold;
+font-size:14px;
+}
+
+.buy{
+border:1px solid #70582c;
+background:#211c13;
+color:#f2ca61;
+border-radius:8px;
+padding:7px 9px;
+font-size:10px;
+font-weight:bold;
+}
+
+/* PAGE */
+
+.page{
+display:none;
+padding-top:15px;
+}
+
+.page.active{
+display:block;
+}
+
+/* PRODUCT DETAILS */
+
+.back{
+border:0;
+background:#191c25;
+color:#ddd;
+border-radius:9px;
+padding:9px 13px;
+margin-bottom:13px;
+}
+
+.detail-card{
+background:#151821;
+border:1px solid #343845;
+border-radius:18px;
+padding:14px;
+}
+
+.detail-img{
+height:190px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:80px;
+border-radius:14px;
+background:linear-gradient(135deg,#2b2140,#171a23);
+border:1px solid #403650;
+}
+
+.detail-card h1{
+font-size:20px;
+color:#f2ca61;
+margin:15px 0 7px;
+}
+
+.detail-text{
+font-size:12px;
+color:#afb2bc;
+line-height:1.8;
+}
+
+.features{
+margin:13px 0;
+padding:11px;
+background:#1c2029;
+border-radius:11px;
+font-size:11px;
+line-height:2;
+color:#c6c8cf;
+}
+
+.detail-price{
+font-size:20px;
+color:#f2ca61;
+font-weight:bold;
+margin:12px 0;
+}
+
+/* CART */
+
+.cart-item{
+display:flex;
+align-items:center;
+gap:10px;
+background:#151821;
+border:1px solid #303440;
+border-radius:12px;
+padding:10px;
+margin-bottom:8px;
+}
+
+.cart-icon{
+font-size:30px;
+}
+
+.cart-info{
+flex:1;
+}
+
+.cart-info b{
+font-size:12px;
+}
+
+.cart-info small{
+display:block;
+color:#9296a3;
+margin-top:4px;
+}
+
+.remove{
+border:0;
+background:#2a1b1b;
+color:#ff9999;
+border-radius:7px;
+padding:7px;
+}
+
+/* ACCOUNT */
+
+.account-card{
+background:#151821;
+border:1px solid #343844;
+border-radius:16px;
+padding:18px;
+text-align:center;
+}
+
+.avatar{
+font-size:55px;
+margin-bottom:8px;
+}
+
+.user-name{
+font-size:18px;
+font-weight:bold;
+}
+
+.user-info{
+font-size:11px;
+color:#999eaa;
+margin-top:6px;
+}
+
+/* EMPTY */
+
+.empty{
+text-align:center;
+padding:45px 15px;
+color:#8f94a1;
+font-size:13px;
+}
+
+/* BOTTOM */
+
+.bottom{
+position:fixed;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+width:100%;
+max-width:600px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+background:#0d1017f7;
+border-top:1px solid #292d37;
+z-index:30;
+backdrop-filter:blur(12px);
+}
+
+.bottom button{
+border:0;
+background:none;
+color:#858a98;
+padding:9px 3px;
+font-size:10px;
+}
+
+.bottom button.active{
+color:#f1c95f;
+}
+
+.bottom b{
+display:block;
+font-size:18px;
+margin-bottom:3px;
+}
+
+/* TOAST */
+
+.toast{
+position:fixed;
+left:50%;
+bottom:78px;
+transform:translateX(-50%) translateY(20px);
+width:calc(100% - 30px);
+max-width:500px;
+padding:12px;
+border-radius:11px;
+background:#252a34;
+border:1px solid #454c59;
+text-align:center;
+font-size:11px;
+opacity:0;
+pointer-events:none;
+transition:.25s;
+z-index:100;
+}
+
+.toast.show{
+opacity:1;
+transform:translateX(-50%) translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+
+<div class="top">
+
+<div class="logo">
+👑 Empire Digital
+</div>
+
+<button class="cart" onclick="openCart()">
+🛒 <span id="cartCount">0</span>
+</button>
+
+</div>
+
+<div class="search">
+
+<input
+id="searchInput"
+placeholder="🔎 ابحث عن منتج..."
+oninput="searchProducts()"
+>
+
+<button onclick="searchProducts()">🔎</button>
+
+</div>
+
+</header>
+
+
+<!-- HOME -->
+
+<div id="homePage" class="page active">
+
+<div class="hero">
+
+<h1>🔥 منتجات رقمية مميزة</h1>
+
+<p>
+قوالب وتصاميم وأدوات رقمية جاهزة.
+اختر المنتج الذي يناسبك واحصل عليه مباشرة.
+</p>
+
+<button onclick="showStore()">
+🛍️ تصفح المتجر
+</button>
+
+</div>
+
+
+<section>
+
+<div class="section-head">
+<h2>التصنيفات</h2>
+</div>
+
+<div class="categories">
+
+<button class="category active" onclick="filterCategory('all',this)">
+الكل
+</button>
+
+<button class="category" onclick="filterCategory('design',this)">
+🎨 تصاميم
+</button>
+
+<button class="category" onclick="filterCategory('social',this)">
+📱 سوشيال
+</button>
+
+<button class="category" onclick="filterCategory('business',this)">
+💼 أعمال
+</button>
+
+<button class="category" onclick="filterCategory('tools',this)">
+🤖 أدوات
+</button>
+
+</div>
+
+</section>
+
+
+<section>
+
+<div class="section-head">
+
+<h2>🔥 المنتجات</h2>
+
+<span id="productCount">
+4 منتجات
+</span>
+
+</div>
+
+<div class="products" id="products"></div>
+
+</section>
+
+</div>
+
+
+<!-- STORE -->
+
+<div id="storePage" class="page">
+
+<section>
+
+<div class="section-head">
+<h2>🛍️ المتجر</h2>
+</div>
+
+<div class="products" id="storeProducts"></div>
+
+</section>
+
+</div>
+
+
+<!-- DETAIL -->
+
+<div id="detailPage" class="page">
+
+<section>
+
+<button class="back" onclick="showStore()">
+↩️ العودة للمتجر
+</button>
+
+<div class="detail-card">
+
+<div class="detail-img" id="detailImg"></div>
+
+<h1 id="detailName"></h1>
+
+<div class="detail-text" id="detailDescription"></div>
+
+<div class="features" id="detailFeatures"></div>
+
+<div class="detail-price" id="detailPrice"></div>
+
+<button class="primary" onclick="addCurrentToCart()">
+🛒 إضافة إلى السلة
+</button>
+
+</div>
+
+</section>
+
+</div>
+
+
+<!-- CART -->
+
+<div id="cartPage" class="page">
+
+<section>
+
+<div class="section-head">
+<h2>🛒 سلة المشتريات</h2>
+</div>
+
+<div id="cartItems"></div>
+
+<div id="cartTotal"></div>
+
+</section>
+
+</div>
+
+
+<!-- ACCOUNT -->
+
+<div id="accountPage" class="page">
+
+<section>
+
+<div class="section-head">
+<h2>👤 حسابي</h2>
+</div>
+
+<div class="account-card">
+
+<div class="avatar">👑</div>
+
+<div class="user-name" id="userName">
+زائر Empire Digital
+</div>
+
+<div class="user-info" id="userInfo">
+مشترياتك الرقمية ستظهر هنا.
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+</div>
+
+
+<!-- BOTTOM -->
+
+<div class="bottom">
+
+<button id="navHome" class="active" onclick="showHome()">
+<b>🏠</b>
+الرئيسية
+</button>
+
+<button id="navStore" onclick="showStore()">
+<b>🛍️</b>
+المتجر
+</button>
+
+<button id="navCart" onclick="openCart()">
+<b>🛒</b>
+السلة
+</button>
+
+<button id="navAccount" onclick="openAccount()">
+<b>👤</b>
+حسابي
+</button>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* TELEGRAM */
+
+const tg=window.Telegram?.WebApp;
+
+if(tg){
+tg.ready();
+tg.expand();
+}
+
+
+/* PRODUCTS */
+
+const products=[
+
+{
+id:1,
+name:"حزمة التصاميم الإعلانية",
+category:"design",
+icon:"🎨",
+price:100,
+description:"مجموعة تصاميم جاهزة للاستخدام في الإعلانات والمنشورات.",
+features:[
+"20 تصميمًا احترافيًا",
+"مناسبة للمحلات والخدمات",
+"جاهزة للاستخدام",
+"ملفات رقمية"
+]
+},
+
+{
+id:2,
+name:"حزمة Social Media",
+category:"social",
+icon:"📱",
+price:100,
+description:"قوالب جاهزة لمنشورات وصفحات التواصل الاجتماعي.",
+features:[
+"30 قالب منشور",
+"20 قالب Story",
+"تصاميم قابلة للتعديل",
+"مناسبة للسوشيال ميديا"
+]
+},
+
+{
+id:3,
+name:"حزمة الأعمال",
+category:"business",
+icon:"💼",
+price:150,
+description:"مجموعة أدوات وقوالب تساعد أصحاب المشاريع والأعمال.",
+features:[
+"قالب CV",
+"فاتورة جاهزة",
+"عرض أسعار",
+"بطاقة أعمال"
+]
+},
+
+{
+id:4,
+name:"حزمة الأدوات الرقمية",
+category:"tools",
+icon:"🤖",
+price:150,
+description:"مجموعة أدوات رقمية بسيطة ومفيدة للاستخدام اليومي.",
+features:[
+"حاسبة الأرباح",
+"حاسبة الأسعار",
+"أفكار تسويقية",
+"أدوات إنتاجية"
+]
+}
+
+];
+
+
+let cart=
+JSON.parse(localStorage.getItem("empireDigitalCart")||"[]");
+
+let currentProduct=null;
+let currentCategory="all";
+
+
+/* SAVE */
+
+function saveCart(){
+
+localStorage.setItem(
+"empireDigitalCart",
+JSON.stringify(cart)
+);
+
+renderCartCount();
+
+}
+
+
+/* PRODUCT CARD */
+
+function productCard(p){
+
+return `
+
+<div class="product">
+
+<div
+class="product-img"
+onclick="openProduct(${p.id})"
+>
+${p.icon}
+</div>
+
+<h3>${p.name}</h3>
+
+<p>${p.description}</p>
+
+<div class="product-bottom">
+
+<div class="price">
+⭐ ${p.price}
+</div>
+
+<button
+class="buy"
+onclick="openProduct(${p.id})"
+>
+عرض
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* RENDER */
+
+function renderProducts(list=products){
+
+const html=list.map(productCard).join("");
+
+document.getElementById("products").innerHTML=html;
+
+document.getElementById("storeProducts").innerHTML=html;
+
+document.getElementById("productCount").textContent=
+list.length+" منتجات";
+
+}
+
+
+/* OPEN PRODUCT */
+
+function openProduct(id){
+
+currentProduct=
+products.find(p=>p.id===id);
+
+if(!currentProduct)return;
+
+document.getElementById("detailImg").textContent=
+currentProduct.icon;
+
+document.getElementById("detailName").textContent=
+currentProduct.name;
+
+document.getElementById("detailDescription").textContent=
+currentProduct.description;
+
+document.getElementById("detailPrice").textContent=
+"⭐ "+currentProduct.price+" Stars";
+
+document.getElementById("detailFeatures").innerHTML=
+currentProduct.features
+.map(x=>"✓ "+x)
+.join("<br>");
+
+showPage("detailPage");
+
+}
+
+
+/* ADD CART */
+
+function addCurrentToCart(){
+
+if(!currentProduct)return;
+
+if(!cart.includes(currentProduct.id)){
+
+cart.push(currentProduct.id);
+
+saveCart();
+
+message("✅ تمت إضافة المنتج إلى السلة.");
+
+}else{
+
+message("ℹ️ المنتج موجود بالفعل في السلة.");
+
+}
+
+}
+
+
+/* CART */
+
+function openCart(){
+
+renderCart();
+
+showPage("cartPage");
+
+}
+
+
+function renderCart(){
+
+const box=document.getElementById("cartItems");
+
+if(cart.length===0){
+
+box.innerHTML=
+`<div class="empty">
+🛒 السلة فارغة<br><br>
+أضف بعض المنتجات للبدء.
+</div>`;
+
+document.getElementById("cartTotal").innerHTML="";
+
+return;
+
+}
+
+let total=0;
+
+box.innerHTML=cart.map(id=>{
+
+const p=products.find(x=>x.id===id);
+
+if(!p)return"";
+
+total+=p.price;
+
+return `
+
+<div class="cart-item">
+
+<div class="cart-icon">
+${p.icon}
+</div>
+
+<div class="cart-info">
+
+<b>${p.name}</b>
+
+<small>⭐ ${p.price} Stars</small>
+
+</div>
+
+<button
+class="remove"
+onclick="removeCart(${p.id})"
+>
+✕
+</button>
+
+</div>
+
+`;
+
+}).join("");
+
+document.getElementById("cartTotal").innerHTML=`
+
+<div class="detail-card">
+
+<div style="display:flex;justify-content:space-between;margin-bottom:12px">
+
+<b>المجموع</b>
+
+<strong style="color:#f2ca61">
+⭐ ${total}
+</strong>
+
+</div>
+
+<button
+class="primary"
+onclick="checkout()"
+>
+💳 الانتقال للدفع
+</button>
+
+</div>
+
+`;
+
+}
+
+
+function removeCart(id){
+
+cart=cart.filter(x=>x!==id);
+
+saveCart();
+
+renderCart();
+
+message("🗑️ تم حذف المنتج.");
+
+}
+
+
+function checkout(){
+
+message(
+"💳 الدفع بـ Telegram Stars سنفعّله في المرحلة القادمة."
+);
+
+}
+
+
+/* SEARCH */
+
+function searchProducts(){
+
+const q=
+document.getElementById("searchInput")
+.value
+.trim()
+.toLowerCase();
+
+let list=products;
+
+if(q){
+
+list=products.filter(p=>
+p.name.toLowerCase().includes(q)||
+p.description.toLowerCase().includes(q)
+);
+
+}
+
+renderProducts(list);
+
+showPage("storePage");
+
+}
+
+
+/* FILTER */
+
+function filterCategory(category,button){
+
+currentCategory=category;
+
+document.querySelectorAll(".category")
+.forEach(x=>x.classList.remove("active"));
+
+button.classList.add("active");
+
+let list=products;
+
+if(category!=="all"){
+
+list=products.filter(
+p=>p.category===category
+);
+
+}
+
+renderProducts(list);
+
+showPage("storePage");
+
+}
+
+
+/* PAGES */
+
+function showPage(id){
+
+document.querySelectorAll(".page")
+.forEach(p=>p.classList.remove("active"));
+
+document.getElementById(id)
+.classList.add("active");
+
+updateNav(id);
+
+window.scrollTo(0,0);
+
+}
+
+
+function updateNav(page){
+
+document.querySelectorAll(".bottom button")
+.forEach(b=>b.classList.remove("active"));
+
+if(page==="homePage")
+document.getElementById("navHome").classList.add("active");
+
+if(page==="storePage")
+document.getElementById("navStore").classList.add("active");
+
+if(page==="cartPage")
+document.getElementById("navCart").classList.add("active");
+
+if(page==="accountPage")
+document.getElementById("navAccount").classList.add("active");
+
+}
+
+
+function showHome(){
+
+showPage("homePage");
+
+}
+
+
+function showStore(){
+
+renderProducts();
+
+showPage("storePage");
+
+}
+
+
+function openAccount(){
+
+if(tg?.initDataUnsafe?.user){
+
+const user=tg.initDataUnsafe.user;
+
+document.getElementById("userName").textContent=
+(user.first_name||"")+" "+
+(user.last_name||"");
+
+document.getElementById("userInfo").textContent=
+"حساب Telegram الخاص بك";
+
+}
+
+showPage("accountPage");
+
+}
+
+
+/* COUNT */
+
+function renderCartCount(){
+
+document.getElementById("cartCount")
+.textContent=cart.length;
+
+}
+
+
+/* MESSAGE */
+
+function message(text){
+
+const toast=
+document.getElementById("toast");
+
+toast.textContent=text;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+
+toast.classList.remove("show");
+
+},2200);
+
+}
+
+
+/* START */
+
+renderProducts();
+
+renderCartCount();
+
+</script>
+
+</body>
+</html>
