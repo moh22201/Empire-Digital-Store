@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Empire Digital</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --gold:#f5d36b;
+  --gold2:#c8942f;
+  --gold3:#ffe7a0;
+  --black:#050505;
+  --panel:#0d0d0f;
+  --panel2:#131315;
+  --line:rgba(245,211,107,.22);
+  --muted:#92929a;
+}
+html,body{margin:0;min-height:100%;background:#000;color:#fff;font-family:Tahoma,Arial,sans-serif}
+body{overflow-x:hidden}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(245,211,107,.09),transparent 25%),
+    radial-gradient(circle at 85% 35%,rgba(197,142,43,.07),transparent 28%),
+    linear-gradient(180deg,#090909,#000 70%);
+}
+.app{max-width:600px;min-height:100vh;margin:auto;background:linear-gradient(180deg,#090909,#030303);padding-bottom:86px}
+header{
+  padding:15px 15px 12px;background:rgba(7,7,8,.92);
+  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;
+  backdrop-filter:blur(16px);box-shadow:0 8px 30px rgba(0,0,0,.35)
+}
+.top{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:22px;font-weight:900;letter-spacing:.2px;color:var(--gold);text-shadow:0 0 16px rgba(245,211,107,.2)}
+.logo span{color:#fff}
+.cart{
+  border:1px solid var(--line);border-radius:12px;padding:8px 12px;
+  background:linear-gradient(145deg,#19140a,#0d0d0d);color:var(--gold);font-size:16px;
+  box-shadow:inset 0 0 15px rgba(245,211,107,.04)
+}
+.search{margin-top:13px;display:flex;gap:7px}
+.search input{
+  width:100%;background:#101012;border:1px solid #29292d;border-radius:12px;
+  padding:12px;color:#fff;outline:none;font-size:12px
+}
+.search input:focus{border-color:var(--gold2);box-shadow:0 0 0 3px rgba(245,211,107,.06)}
+.search button{
+  width:46px;border:1px solid var(--gold2);background:#171208;color:var(--gold);
+  border-radius:12px;font-size:15px
+}
+.hero{
+  margin:15px;padding:23px 18px;border-radius:22px;position:relative;overflow:hidden;
+  border:1px solid rgba(245,211,107,.3);
+  background:
+    radial-gradient(circle at 90% 10%,rgba(245,211,107,.18),transparent 35%),
+    linear-gradient(135deg,#17130b,#090909 55%,#12100c);
+  box-shadow:0 15px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.03)
+}
+.hero:after{
+  content:"";position:absolute;width:180px;height:180px;border-radius:50%;
+  left:-80px;bottom:-110px;border:1px solid rgba(245,211,107,.12)
+}
+.badge{
+  display:inline-block;padding:6px 10px;border-radius:20px;
+  background:rgba(245,211,107,.08);border:1px solid rgba(245,211,107,.22);
+  color:var(--gold3);font-size:10px;margin-bottom:10px
+}
+.hero h1{margin:0;font-size:23px;line-height:1.35}
+.hero p{color:#b4b4ba;font-size:12px;line-height:1.8;margin:9px 0 16px}
+.hero button,.primary{
+  width:100%;border:1px solid #f2ca61;border-radius:12px;padding:13px;
+  background:linear-gradient(135deg,#ffe59a 0%,#f0c95e 35%,#b27b20 100%);
+  color:#120e05;font-weight:900;box-shadow:0 8px 24px rgba(245,211,107,.12);
+  cursor:pointer
+}
+.hero button:active,.primary:active,.buy:active,.cart:active{transform:scale(.98)}
+section{padding:0 15px 18px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
+.section-head h2{font-size:16px;margin:0;color:#fff}
+.section-head h2:after{content:"";display:block;width:34px;height:2px;background:var(--gold);margin-top:5px;border-radius:2px}
+.section-head span{font-size:10px;color:#85858d}
+.categories{display:flex;gap:7px;overflow-x:auto;padding-bottom:5px;scrollbar-width:none}
+.categories::-webkit-scrollbar{display:none}
+.category{
+  white-space:nowrap;padding:8px 13px;border-radius:20px;background:#0f0f11;
+  border:1px solid #29292d;color:#aaa;font-size:11px
+}
+.category.active{
+  background:linear-gradient(135deg,#2b210e,#120f09);border-color:#9a7127;color:var(--gold);
+  box-shadow:0 0 18px rgba(245,211,107,.06)
+}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.product{
+  background:linear-gradient(160deg,#151516,#0b0b0c);border:1px solid #29292d;
+  border-radius:17px;padding:9px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.25);
+  transition:.2s
+}
+.product:active{transform:scale(.985)}
+.product-img{
+  height:112px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  font-size:43px;background:
+    radial-gradient(circle at 30% 20%,rgba(245,211,107,.16),transparent 40%),
+    linear-gradient(145deg,#201a0d,#0e0e10);
+  border:1px solid rgba(245,211,107,.18);cursor:pointer
+}
+.product h3{font-size:12px;margin:10px 2px 5px;color:#f5f5f5}
+.product p{font-size:10px;line-height:1.55;color:#85858e;height:32px;margin:0 2px 8px}
+.product-bottom{display:flex;justify-content:space-between;align-items:center;gap:5px}
+.price{color:var(--gold);font-weight:bold;font-size:14px}
+.buy{
+  border:1px solid #8d6825;background:#171208;color:var(--gold);border-radius:9px;
+  padding:7px 10px;font-size:10px;font-weight:bold
+}
+.page{display:none;padding-top:15px}.page.active{display:block}
+.back{
+  border:1px solid #2d2d31;background:#111113;color:#ddd;border-radius:10px;
+  padding:9px 13px;margin-bottom:13px
+}
+.detail-card,.account-card{
+  background:linear-gradient(160deg,#151515,#090909);border:1px solid rgba(245,211,107,.18);
+  border-radius:20px;padding:14px;box-shadow:0 15px 35px rgba(0,0,0,.35)
+}
+.detail-img{
+  height:190px;display:flex;align-items:center;justify-content:center;font-size:80px;border-radius:15px;
+  background:radial-gradient(circle,rgba(245,211,107,.12),transparent 50%),linear-gradient(145deg,#211a0d,#0b0b0d);
+  border:1px solid rgba(245,211,107,.18)
+}
+.detail-card h1{font-size:20px;color:var(--gold);margin:15px 0 7px}
+.detail-text{font-size:12px;color:#b0b0b7;line-height:1.8}
+.features{margin:13px 0;padding:12px;background:#0e0e10;border-radius:12px;border:1px solid #25252a;font-size:11px;line-height:2;color:#c9c9ce}
+.detail-price{font-size:20px;color:var(--gold);font-weight:bold;margin:13px 0}
+.cart-item,.purchase-card{
+  background:linear-gradient(160deg,#151515,#090909);border:1px solid #29292d;border-radius:14px;
+  padding:11px;margin-bottom:9px
+}
+.cart-item{display:flex;align-items:center;gap:10px}
+.cart-icon,.purchase-icon{font-size:31px}
+.cart-info,.purchase-info{flex:1}.cart-info b,.purchase-info b{font-size:12px}.cart-info small,.purchase-info small{display:block;color:#85858e;margin-top:4px}
+.remove{border:1px solid #452525;background:#1c0f0f;color:#ff9d9d;border-radius:8px;padding:7px}
+.account-card{text-align:center;padding:22px}
+.avatar{font-size:55px;margin-bottom:8px}
+.user-name{font-size:18px;font-weight:bold;color:#fff}
+.user-info{font-size:11px;color:#8d8d95;margin-top:6px}
+.purchases-button{
+  margin-top:15px;width:100%;border:1px solid #9a7127;background:linear-gradient(135deg,#221a0c,#0e0e0e);
+  color:var(--gold);border-radius:12px;padding:12px;font-weight:bold
+}
+.purchase-top{display:flex;align-items:center;gap:10px}
+.purchase-price{color:var(--gold);font-weight:bold;font-size:12px}
+.delivery{margin-top:11px;padding:11px;background:#0e0e10;border-radius:10px;border:1px solid #29292d;font-size:11px;line-height:1.8;color:#c8c8cd}
+.delivery-title{color:var(--gold);font-weight:bold;margin-bottom:5px}
+.loading,.empty{text-align:center;padding:45px 15px;color:#888;font-size:13px}
+.bottom{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:600px;
+  display:grid;grid-template-columns:repeat(4,1fr);background:rgba(7,7,8,.94);
+  border-top:1px solid rgba(245,211,107,.18);z-index:30;backdrop-filter:blur(16px)
+}
+.bottom button{border:0;background:none;color:#707078;padding:9px 3px;font-size:10px}
+.bottom button.active{color:var(--gold)}
+.bottom b{display:block;font-size:18px;margin-bottom:3px}
+.toast{
+  position:fixed;left:50%;bottom:78px;transform:translateX(-50%) translateY(20px);width:calc(100% - 30px);
+  max-width:500px;padding:12px;border-radius:12px;background:#151515;border:1px solid #5e481e;
+  text-align:center;font-size:11px;opacity:0;pointer-events:none;transition:.25s;z-index:100;box-shadow:0 10px 30px #000
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* SUCCESS */
+.success-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;z-index:300;padding:22px
+}
+.success-overlay.show{display:flex}
+.success-box{
+  width:100%;max-width:390px;text-align:center;padding:28px 20px;border-radius:24px;
+  border:1px solid rgba(245,211,107,.5);
+  background:radial-gradient(circle at 50% 0,rgba(245,211,107,.18),transparent 42%),#0b0b0c;
+  box-shadow:0 0 70px rgba(245,211,107,.13)
+}
+.success-icon{
+  font-size:68px;animation:pop .65s ease
+}
+.success-box h2{color:var(--gold);font-size:24px;margin:8px 0}
+.success-box p{color:#b7b7bd;font-size:12px;line-height:1.8}
+.success-box button{margin-top:8px}
+@keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.confetti{position:fixed;top:-20px;width:7px;height:13px;z-index:301;animation:fall linear forwards}
+@keyframes fall{to{transform:translate3d(var(--x),110vh,0) rotate(720deg);opacity:.1}}
+</style>
+</head>
+
+<body>
+<div class="app">
+<header>
+  <div class="top">
+    <div class="logo">👑 Empire <span>Digital</span></div>
+    <button class="cart" onclick="openCart()">🛒 <span id="cartCount">0</span></button>
+  </div>
+  <div class="search">
+    <input id="searchInput" placeholder="🔎 ابحث عن منتج..." oninput="searchProducts()">
+    <button onclick="searchProducts()">🔎</button>
+  </div>
+</header>
+
+<div id="homePage" class="page active">
+  <div class="hero">
+    <div class="badge">✦ DIGITAL LUXURY STORE</div>
+    <h1>منتجات رقمية مصممة لتظهر باحتراف ✨</h1>
+    <p>تصاميم، قوالب وأدوات رقمية جاهزة للاستخدام، بجودة فاخرة وتجربة شراء سهلة عبر Telegram.</p>
+    <button onclick="showStore()">🛍️ اكتشف المتجر</button>
+  </div>
+  <section>
+    <div class="section-head"><h2>التصنيفات</h2></div>
+    <div class="categories">
+      <button class="category active" onclick="filterCategory('all',this)">الكل</button>
+      <button class="category" onclick="filterCategory('design',this)">🎨 تصاميم</button>
+      <button class="category" onclick="filterCategory('social',this)">📱 سوشيال</button>
+      <button class="category" onclick="filterCategory('business',this)">💼 أعمال</button>
+      <button class="category" onclick="filterCategory('tools',this)">🤖 أدوات</button>
+    </div>
+  </section>
+  <section>
+    <div class="section-head"><h2>🔥 المنتجات</h2><span id="productCount">4 منتجات</span></div>
+    <div class="products" id="products"></div>
+  </section>
+</div>
+
+<div id="storePage" class="page"><section><div class="section-head"><h2>🛍️ المتجر</h2></div><div class="products" id="storeProducts"></div></section></div>
+
+<div id="detailPage" class="page">
+<section>
+  <button class="back" onclick="showStore()">↩️ العودة للمتجر</button>
+  <div class="detail-card">
+    <div class="detail-img" id="detailImg"></div>
+    <h1 id="detailName"></h1>
+    <div class="detail-text" id="detailDescription"></div>
+    <div class="features" id="detailFeatures"></div>
+    <div class="detail-price" id="detailPrice"></div>
+    <button class="primary" onclick="addCurrentToCart()">🛒 إضافة إلى السلة</button>
+  </div>
+</section>
+</div>
+
+<div id="cartPage" class="page">
+<section>
+  <div class="section-head"><h2>🛒 سلة المشتريات</h2></div>
+  <div id="cartItems"></div><div id="cartTotal"></div>
+</section>
+</div>
+
+<div id="accountPage" class="page">
+<section>
+  <div class="section-head"><h2>👤 حسابي</h2></div>
+  <div class="account-card">
+    <div class="avatar">👑</div>
+    <div class="user-name" id="userName">زائر Empire Digital</div>
+    <div class="user-info" id="userInfo">حسابك ومشترياتك الرقمية.</div>
+    <button class="purchases-button" onclick="openPurchases()">📦 مشترياتي</button>
+  </div>
+</section>
+</div>
+
+<div id="purchasesPage" class="page">
+<section>
+  <button class="back" onclick="openAccount()">↩️ العودة للحساب</button>
+  <div class="section-head"><h2>📦 مشترياتي</h2><span id="purchaseCount">0 منتجات</span></div>
+  <div id="purchasesList"></div>
+</section>
+</div>
+</div>
+
+<div class="bottom">
+  <button id="navHome" class="active" onclick="showHome()"><b>🏠</b>الرئيسية</button>
+  <button id="navStore" onclick="showStore()"><b>🛍️</b>المتجر</button>
+  <button id="navCart" onclick="openCart()"><b>🛒</b>السلة</button>
+  <button id="navAccount" onclick="openAccount()"><b>👤</b>حسابي</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="success-overlay" id="successOverlay">
+  <div class="success-box">
+    <div class="success-icon">🎉</div>
+    <h2>Félicitations !</h2>
+    <p id="successText">تم تأكيد الدفع بنجاح.<br>شكرًا لشرائك من Empire Digital.</p>
+    <button class="primary" onclick="closeSuccess()">📦 عرض مشترياتي</button>
+  </div>
+</div>
+
+<script>
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();}
+
+const products=[
+{id:1,name:"حزمة التصاميم الإعلانية",category:"design",icon:"🎨",price:100,description:"مجموعة تصاميم جاهزة للاستخدام في الإعلانات والمنشورات.",features:["20 تصميمًا احترافيًا","مناسبة للمحلات والخدمات","جاهزة للاستخدام","ملفات رقمية"]},
+{id:2,name:"حزمة Social Media",category:"social",icon:"📱",price:100,description:"قوالب جاهزة لمنشورات وصفحات التواصل الاجتماعي.",features:["30 قالب منشور","20 قالب Story","تصاميم قابلة للتعديل","مناسبة للسوشيال ميديا"]},
+{id:3,name:"حزمة الأعمال",category:"business",icon:"💼",price:150,description:"مجموعة أدوات وقوالب تساعد أصحاب المشاريع والأعمال.",features:["قالب CV","فاتورة جاهزة","عرض أسعار","بطاقة أعمال"]},
+{id:4,name:"حزمة الأدوات الرقمية",category:"tools",icon:"🤖",price:150,description:"مجموعة أدوات رقمية بسيطة ومفيدة للاستخدام اليومي.",features:["حاسبة الأرباح","حاسبة الأسعار","أفكار تسويقية","أدوات إنتاجية"]}
+];
+
+let cart=JSON.parse(localStorage.getItem("empireDigitalCart")||"[]");
+let currentProduct=null,currentCategory="all";
+
+function saveCart(){localStorage.setItem("empireDigitalCart",JSON.stringify(cart));renderCartCount()}
+function productCard(p){return `<div class="product"><div class="product-img" onclick="openProduct(${p.id})">${p.icon}</div><h3>${p.name}</h3><p>${p.description}</p><div class="product-bottom"><div class="price">⭐ ${p.price}</div><button class="buy" onclick="openProduct(${p.id})">عرض</button></div></div>`}
+function renderProducts(list=products){
+  const html=list.map(productCard).join("");
+  document.getElementById("products").innerHTML=html;
+  document.getElementById("storeProducts").innerHTML=html;
+  document.getElementById("productCount").textContent=list.length+" منتجات";
+}
+function openProduct(id){
+  currentProduct=products.find(p=>p.id===id); if(!currentProduct)return;
+  document.getElementById("detailImg").textContent=currentProduct.icon;
+  document.getElementById("detailName").textContent=currentProduct.name;
+  document.getElementById("detailDescription").textContent=currentProduct.description;
+  document.getElementById("detailPrice").textContent="⭐ "+currentProduct.price+" Stars";
+  document.getElementById("detailFeatures").innerHTML=currentProduct.features.map(x=>"✓ "+x).join("<br>");
+  showPage("detailPage");
+}
+function addCurrentToCart(){
+  if(!currentProduct)return;
+  if(!cart.includes(currentProduct.id)){cart.push(currentProduct.id);saveCart();message("✅ تمت إضافة المنتج إلى السلة.");}
+  else message("ℹ️ المنتج موجود بالفعل في السلة.");
+}
+function openCart(){renderCart();showPage("cartPage")}
+function renderCart(){
+  const box=document.getElementById("cartItems");
+  if(!cart.length){box.innerHTML=`<div class="empty">🛒 السلة فارغة<br><br>أضف بعض المنتجات للبدء.</div>`;document.getElementById("cartTotal").innerHTML="";return}
+  let total=0;
+  box.innerHTML=cart.map(id=>{
+    const p=products.find(x=>x.id===id);if(!p)return"";
+    total+=p.price;
+    return `<div class="cart-item"><div class="cart-icon">${p.icon}</div><div class="cart-info"><b>${p.name}</b><small>⭐ ${p.price} Stars</small></div><button class="remove" onclick="removeCart(${p.id})">✕</button></div>`;
+  }).join("");
+  document.getElementById("cartTotal").innerHTML=`<div class="detail-card"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><b>المجموع</b><strong style="color:#f5d36b">⭐ ${total}</strong></div><button class="primary" onclick="checkout()">💳 الانتقال للدفع</button></div>`;
+}
+function removeCart(id){cart=cart.filter(x=>x!==id);saveCart();renderCart();message("🗑️ تم حذف المنتج.")}
+async function checkout(){
+  if(!cart.length){message("🛒 السلة فارغة.");return}
+  if(cart.length>1){message("💡 للدفع الآن اختر منتجًا واحدًا فقط.");return}
+  const product=products.find(p=>p.id===cart[0]); if(!product){message("❌ المنتج غير موجود.");return}
+  const backendIds={1:"design-pack",2:"social-pack",3:"business-pack",4:"digital-tools"};
+  const backendProductId=backendIds[product.id]; if(!backendProductId){message("❌ خطأ في المنتج.");return}
+  message("⏳ جاري تجهيز فاتورة الدفع...");
+  try{
+    const response=await fetch("https://glgkwcrwytuajlakgawi.supabase.co/functions/v1/create-invoice",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({productId:backendProductId})});
+    const data=await response.json();
+    if(!response.ok||!data.success)throw new Error(data.error||"فشل إنشاء الفاتورة");
+    if(!data.invoiceLink)throw new Error("لم يتم الحصول على رابط الدفع");
+    if(tg&&typeof tg.openInvoice==="function"){
+      tg.openInvoice(data.invoiceLink,status=>{
+        if(status==="paid"){
+          cart=[];saveCart();renderCart();showSuccess(product.name);
+        }else if(status==="cancelled")message("تم إلغاء عملية الدفع.");
+        else if(status==="failed")message("❌ فشل الدفع. حاول مرة أخرى.");
+        else if(status==="pending")message("⏳ الدفع قيد المعالجة.");
+      });
+    }else message("⚠️ يجب فتح المتجر من داخل Telegram.");
+  }catch(error){console.error("CREATE INVOICE ERROR:",error);message("❌ حدث خطأ أثناء إنشاء الفاتورة.")}
+}
+function searchProducts(){
+  const q=document.getElementById("searchInput").value.trim().toLowerCase();
+  const list=q?products.filter(p=>p.name.toLowerCase().includes(q)||p.description.toLowerCase().includes(q)):products;
+  renderProducts(list);showPage("storePage");
+}
+function filterCategory(category,button){
+  currentCategory=category;
+  document.querySelectorAll(".category").forEach(x=>x.classList.remove("active"));button.classList.add("active");
+  const list=category==="all"?products:products.filter(p=>p.category===category);
+  renderProducts(list);showPage("storePage");
+}
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");updateNav(id);window.scrollTo(0,0);
+}
+function updateNav(page){
+  document.querySelectorAll(".bottom button").forEach(b=>b.classList.remove("active"));
+  if(page==="homePage")document.getElementById("navHome").classList.add("active");
+  if(page==="storePage")document.getElementById("navStore").classList.add("active");
+  if(page==="cartPage")document.getElementById("navCart").classList.add("active");
+  if(page==="accountPage"||page==="purchasesPage")document.getElementById("navAccount").classList.add("active");
+}
+function showHome(){showPage("homePage")}
+function showStore(){renderProducts();showPage("storePage")}
+function openAccount(){
+  if(tg?.initDataUnsafe?.user){
+    const user=tg.initDataUnsafe.user;
+    const fullName=[user.first_name,user.last_name].filter(Boolean).join(" ");
+    document.getElementById("userName").textContent=fullName||"مستخدم Telegram";
+    document.getElementById("userInfo").textContent="حساب Telegram الخاص بك";
+  }else{
+    document.getElementById("userName").textContent="زائر Empire Digital";
+    document.getElementById("userInfo").textContent="افتح المتجر من داخل Telegram.";
+  }
+  showPage("accountPage");
+}
+async function openPurchases(){
+  showPage("purchasesPage");
+  const box=document.getElementById("purchasesList"),count=document.getElementById("purchaseCount");
+  box.innerHTML=`<div class="loading">⏳ جاري تحميل مشترياتك...</div>`;count.textContent="...";
+  if(!tg||!tg.initData){box.innerHTML=`<div class="empty">⚠️ يجب فتح المتجر من داخل Telegram</div>`;count.textContent="0 منتجات";return}
+  try{
+    const response=await fetch("https://glgkwcrwytuajlakgawi.supabase.co/functions/v1/my-purchases",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({initData:tg.initData})});
+    const data=await response.json();
+    if(!response.ok||!data.success)throw new Error(data.error||"فشل تحميل المشتريات");
+    const purchases=data.purchases||[];count.textContent=purchases.length+" منتجات";
+    if(!purchases.length){box.innerHTML=`<div class="empty">📦 لا توجد مشتريات بعد.<br><br>ابدأ بشراء أول منتج رقمي من المتجر.</div>`;return}
+    box.innerHTML=purchases.map(p=>{
+      const date=p.purchasedAt?new Date(p.purchasedAt).toLocaleDateString("ar-DZ"):"";
+      return `<div class="purchase-card"><div class="purchase-top"><div class="purchase-icon">${p.icon||"📦"}</div><div class="purchase-info"><b>${p.productName||"منتج رقمي"}</b><small>${date}</small></div><div class="purchase-price">⭐ ${p.amountStars||0}</div></div><div class="delivery"><div class="delivery-title">🎁 محتوى المنتج</div>${p.deliveryContent||"سيتم تسليم المحتوى قريبًا."}</div></div>`;
+    }).join("");
+  }catch(error){console.error("MY PURCHASES ERROR:",error);box.innerHTML=`<div class="empty">❌ حدث خطأ أثناء تحميل مشترياتك.<br><br>حاول مرة أخرى.</div>`;count.textContent="0 منتجات"}
+}
+function renderCartCount(){document.getElementById("cartCount").textContent=cart.length}
+function message(text){
+  const toast=document.getElementById("toast");toast.textContent=text;toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),2200);
+}
+function showSuccess(productName){
+  document.getElementById("successText").innerHTML=`تم الدفع بنجاح لمنتج:<br><strong style="color:#fff">${productName}</strong><br><br>شكرًا لشرائك من Empire Digital.`;
+  document.getElementById("successOverlay").classList.add("show");
+  createConfetti();
+}
+function closeSuccess(){document.getElementById("successOverlay").classList.remove("show");openPurchases()}
+function createConfetti(){
+  for(let i=0;i<34;i++){
+    const c=document.createElement("div");c.className="confetti";
+    c.style.left=Math.random()*100+"%";c.style.setProperty("--x",(Math.random()*260-130)+"px");
+    c.style.animationDuration=(2+Math.random()*2.5)+"s";
+    c.style.background=["#f5d36b","#fff","#c8942f","#8f6a24"][i%4];
+    c.style.transform=`rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(c);setTimeout(()=>c.remove(),5000);
+  }
+}
+renderProducts();renderCartCount();
+</script>
+</body>
+</html>
