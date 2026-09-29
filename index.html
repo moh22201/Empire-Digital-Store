@@ -2879,7 +2879,216 @@ renderProducts();
 renderCartCount();
 
 </script>
+<!-- EMPIRE DIGITAL ADMIN -->
+<div id="adminPanel" style="
+display:none;
+position:fixed;
+inset:0;
+z-index:99999;
+background:#080808;
+color:#fff;
+overflow:auto;
+font-family:Arial,sans-serif;
+padding:20px;
+">
 
+  <div style="max-width:900px;margin:auto;">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;">
+      <div>
+        <div style="color:#d4af37;font-size:13px;">EMPIRE DIGITAL</div>
+        <h1 style="margin:5px 0;">👑 Admin Dashboard</h1>
+      </div>
+
+      <button onclick="closeAdmin()" style="
+        background:#222;
+        color:#fff;
+        border:1px solid #555;
+        padding:10px 15px;
+        border-radius:10px;
+      ">✕</button>
+    </div>
+
+    <div id="adminLoading" style="
+      text-align:center;
+      padding:50px;
+      color:#d4af37;
+    ">
+      جاري تحميل البيانات...
+    </div>
+
+    <div id="adminContent" style="display:none;">
+
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+        margin-bottom:25px;
+      ">
+
+        <div style="background:#151515;border:1px solid #333;border-radius:15px;padding:18px;">
+          <div style="color:#aaa;">🛒 الطلبات</div>
+          <strong id="adminOrders" style="font-size:28px;">0</strong>
+        </div>
+
+        <div style="background:#151515;border:1px solid #333;border-radius:15px;padding:18px;">
+          <div style="color:#aaa;">👥 العملاء</div>
+          <strong id="adminCustomers" style="font-size:28px;">0</strong>
+        </div>
+
+        <div style="background:#151515;border:1px solid #333;border-radius:15px;padding:18px;">
+          <div style="color:#aaa;">⭐ Stars</div>
+          <strong id="adminStars" style="font-size:28px;color:#d4af37;">0</strong>
+        </div>
+
+        <div style="background:#151515;border:1px solid #333;border-radius:15px;padding:18px;">
+          <div style="color:#aaa;">✅ المدفوع</div>
+          <strong id="adminPaid" style="font-size:28px;">0</strong>
+        </div>
+
+      </div>
+
+      <h2 style="color:#d4af37;">📦 الطلبات</h2>
+
+      <div id="adminOrdersList"></div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_FUNCTION_URL =
+"https://glgkwcrwytuajlakgawi.supabase.co/functions/v1/admin-dashboard";
+
+async function openAdmin() {
+
+  const tg = window.Telegram && window.Telegram.WebApp;
+
+  if (!tg) {
+    alert("افتح المتجر من Telegram");
+    return;
+  }
+
+  const adminPanel = document.getElementById("adminPanel");
+
+  adminPanel.style.display = "block";
+
+  document.getElementById("adminLoading").style.display = "block";
+  document.getElementById("adminContent").style.display = "none";
+
+  try {
+
+    const response = await fetch(ADMIN_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        initData: tg.initData
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || "Access denied");
+    }
+
+    document.getElementById("adminOrders").textContent =
+      data.statistics.total_orders;
+
+    document.getElementById("adminPaid").textContent =
+      data.statistics.paid_orders;
+
+    document.getElementById("adminCustomers").textContent =
+      data.statistics.customers;
+
+    document.getElementById("adminStars").textContent =
+      data.statistics.total_stars;
+
+    const list = document.getElementById("adminOrdersList");
+
+    if (!data.orders.length) {
+
+      list.innerHTML = `
+        <div style="
+          background:#151515;
+          border:1px solid #333;
+          border-radius:15px;
+          padding:30px;
+          text-align:center;
+          color:#aaa;
+        ">
+          لا توجد عمليات شراء حتى الآن
+        </div>
+      `;
+
+    } else {
+
+      list.innerHTML = data.orders.map(order => {
+
+        const productName =
+          order.product?.name ||
+          order.product?.Name ||
+          "منتج رقمي";
+
+        return `
+          <div style="
+            background:#151515;
+            border:1px solid #333;
+            border-radius:15px;
+            padding:16px;
+            margin-bottom:10px;
+          ">
+
+            <div style="color:#d4af37;font-weight:bold;">
+              ${productName}
+            </div>
+
+            <div style="margin-top:8px;">
+              ⭐ ${order.amount_stars} Stars
+            </div>
+
+            <div style="color:#aaa;font-size:13px;margin-top:5px;">
+              👤 ${order.telegram_user_id}
+            </div>
+
+            <div style="color:#777;font-size:12px;margin-top:5px;">
+              ${order.created_at || ""}
+            </div>
+
+            <div style="
+              margin-top:8px;
+              color:${order.status === "paid" ? "#7CFC00" : "#ffcc00"};
+            ">
+              ${order.status}
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
+
+    }
+
+    document.getElementById("adminLoading").style.display = "none";
+    document.getElementById("adminContent").style.display = "block";
+
+  } catch (error) {
+
+    document.getElementById("adminLoading").innerHTML = `
+      <div style="color:#ff5555;">
+        ❌ ${error.message}
+      </div>
+    `;
+
+  }
+}
+
+function closeAdmin() {
+  document.getElementById("adminPanel").style.display = "none";
+}
+</script>
 </body>
 </html>
 
