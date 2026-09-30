@@ -3180,6 +3180,12 @@ async function openAdmin(){
 
     }
 
+    /*
+      ==========================
+      STORE STATISTICS
+      ==========================
+    */
+
     document.getElementById(
       "adminOrders"
     ).textContent =
@@ -3203,6 +3209,12 @@ async function openAdmin(){
     ).textContent =
       data.statistics?.total_stars ||
       0;
+
+    /*
+      ==========================
+      ORDERS
+      ==========================
+    */
 
     const list =
       document.getElementById(
@@ -3310,6 +3322,347 @@ async function openAdmin(){
 
     }
 
+    /*
+      ==========================
+      AFFILIATE SECTION
+      ==========================
+    */
+
+    let affiliateSection =
+      document.getElementById(
+        "adminAffiliateSection"
+      );
+
+    if(!affiliateSection){
+
+      affiliateSection =
+        document.createElement(
+          "div"
+        );
+
+      affiliateSection.id =
+        "adminAffiliateSection";
+
+      affiliateSection.style.cssText = `
+        margin-top:25px;
+        padding:18px;
+        border:1px solid rgba(212,175,55,.35);
+        border-radius:16px;
+        background:linear-gradient(
+          145deg,
+          rgba(25,25,25,.98),
+          rgba(10,10,10,.98)
+        );
+        box-shadow:0 8px 25px rgba(0,0,0,.25);
+      `;
+
+      content.appendChild(
+        affiliateSection
+      );
+
+    }
+
+    /*
+      Affiliate statistics
+    */
+
+    const affiliateStats =
+      data.affiliate_statistics || {};
+
+    const affiliates =
+      data.affiliates || [];
+
+    affiliateSection.innerHTML = `
+
+      <div style="
+        font-size:20px;
+        font-weight:800;
+        color:#D4AF37;
+        margin-bottom:16px;
+        text-align:center;
+      ">
+        🤝 Affiliate
+      </div>
+
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+        margin-bottom:18px;
+      ">
+
+        <div style="
+          padding:13px;
+          border-radius:12px;
+          background:#151515;
+          text-align:center;
+        ">
+          <div style="
+            font-size:22px;
+            font-weight:800;
+            color:#D4AF37;
+          ">
+            ${affiliateStats.total_affiliates || 0}
+          </div>
+
+          <div style="
+            font-size:11px;
+            color:#aaa;
+            margin-top:4px;
+          ">
+            👥 المسوقون
+          </div>
+        </div>
+
+        <div style="
+          padding:13px;
+          border-radius:12px;
+          background:#151515;
+          text-align:center;
+        ">
+          <div style="
+            font-size:22px;
+            font-weight:800;
+            color:#D4AF37;
+          ">
+            ${affiliateStats.total_sales || 0}
+          </div>
+
+          <div style="
+            font-size:11px;
+            color:#aaa;
+            margin-top:4px;
+          ">
+            🛒 المبيعات
+          </div>
+        </div>
+
+        <div style="
+          padding:13px;
+          border-radius:12px;
+          background:#151515;
+          text-align:center;
+        ">
+          <div style="
+            font-size:22px;
+            font-weight:800;
+            color:#D4AF37;
+          ">
+            ${affiliateStats.total_sales_stars || 0}
+          </div>
+
+          <div style="
+            font-size:11px;
+            color:#aaa;
+            margin-top:4px;
+          ">
+            ⭐ مبيعات Stars
+          </div>
+        </div>
+
+        <div style="
+          padding:13px;
+          border-radius:12px;
+          background:#151515;
+          text-align:center;
+        ">
+          <div style="
+            font-size:22px;
+            font-weight:800;
+            color:#D4AF37;
+          ">
+            ${affiliateStats.total_commission || 0}
+          </div>
+
+          <div style="
+            font-size:11px;
+            color:#aaa;
+            margin-top:4px;
+          ">
+            💰 إجمالي العمولات
+          </div>
+        </div>
+
+        <div style="
+          padding:13px;
+          border-radius:12px;
+          background:#151515;
+          text-align:center;
+        ">
+          <div style="
+            font-size:22px;
+            font-weight:800;
+            color:#ffcc00;
+          ">
+            ${affiliateStats.pending_commission || 0}
+          </div>
+
+          <div style="
+            font-size:11px;
+            color:#aaa;
+            margin-top:4px;
+          ">
+            ⏳ معلقة
+          </div>
+        </div>
+
+        <div style="
+          padding:13px;
+          border-radius:12px;
+          background:#151515;
+          text-align:center;
+        ">
+          <div style="
+            font-size:22px;
+            font-weight:800;
+            color:#7CFC00;
+          ">
+            ${affiliateStats.paid_commission || 0}
+          </div>
+
+          <div style="
+            font-size:11px;
+            color:#aaa;
+            margin-top:4px;
+          ">
+            ✅ مدفوعة
+          </div>
+        </div>
+
+      </div>
+
+      <div style="
+        font-size:15px;
+        font-weight:700;
+        color:#fff;
+        margin-bottom:10px;
+      ">
+        📋 المسوقون
+      </div>
+
+      ${
+        affiliates.length
+        ? affiliates.map(
+            affiliate => `
+
+              <div style="
+                padding:14px;
+                margin-bottom:10px;
+                border-radius:12px;
+                background:#111;
+                border:1px solid rgba(255,255,255,.08);
+              ">
+
+                <div style="
+                  display:flex;
+                  justify-content:space-between;
+                  align-items:center;
+                  margin-bottom:8px;
+                ">
+
+                  <div style="
+                    font-weight:800;
+                    color:#D4AF37;
+                  ">
+                    ${affiliate.code || "-"}
+                  </div>
+
+                  <div style="
+                    font-size:11px;
+                    color:${
+                      affiliate.status === "active"
+                        ? "#7CFC00"
+                        : "#ff5555"
+                    };
+                  ">
+                    ${
+                      affiliate.status === "active"
+                        ? "● نشط"
+                        : "● " + (affiliate.status || "غير نشط")
+                    }
+                  </div>
+
+                </div>
+
+                <div style="
+                  font-size:12px;
+                  color:#ccc;
+                  line-height:1.9;
+                ">
+
+                  👤 ${
+                    affiliate.name ||
+                    affiliate.full_name ||
+                    affiliate.username ||
+                    "مسوق"
+                  }
+
+                  <br>
+
+                  💵 العمولة:
+                  ${affiliate.commission_percent || 20}%
+
+                  <br>
+
+                  🛒 المبيعات:
+                  ${affiliate.sales_count || 0}
+
+                  <br>
+
+                  ⭐ قيمة المبيعات:
+                  ${affiliate.sales_stars || 0}
+
+                  Stars
+
+                  <br>
+
+                  💰 إجمالي العمولة:
+                  ${affiliate.total_commission || 0}
+
+                  Stars
+
+                  <br>
+
+                  ⏳ المعلقة:
+                  ${affiliate.pending_commission || 0}
+
+                  Stars
+
+                  <br>
+
+                  ✅ المدفوعة:
+                  ${affiliate.paid_commission || 0}
+
+                  Stars
+
+                </div>
+
+              </div>
+
+            `
+          ).join("")
+        : `
+
+          <div style="
+            padding:15px;
+            text-align:center;
+            color:#777;
+            font-size:12px;
+          ">
+            لا يوجد مسوقون حتى الآن.
+          </div>
+
+        `
+      }
+
+    `;
+
+    /*
+      ==========================
+      SHOW ADMIN
+      ==========================
+    */
+
     loading.style.display =
       "none";
 
@@ -3345,7 +3698,6 @@ async function openAdmin(){
   }
 
 }
-
 
 /* ================= CLOSE ADMIN ================= */
 
