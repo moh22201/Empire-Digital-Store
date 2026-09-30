@@ -1,0 +1,3507 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>Empire Digital</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+  --gold:#f6d36b;
+  --gold2:#c59635;
+  --gold3:#ffe8a0;
+  --gold4:#8b641f;
+  --black:#030303;
+  --bg:#070707;
+  --panel:#0d0d0f;
+  --panel2:#121214;
+  --text:#fff;
+  --muted:#9999a0;
+  --line:rgba(246,211,107,.20);
+  --lineStrong:rgba(246,211,107,.48);
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:#020202;
+  color:var(--text);
+  font-family:Tahoma,Arial,sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(246,211,107,.13),transparent 28%),
+    radial-gradient(circle at 100% 35%,rgba(160,110,25,.08),transparent 28%),
+    radial-gradient(circle at 0 70%,rgba(246,211,107,.045),transparent 30%),
+    linear-gradient(180deg,#0a0907,#020202 75%);
+}
+
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  opacity:.18;
+  background-image:
+    radial-gradient(rgba(255,255,255,.08) .6px,transparent .6px);
+  background-size:8px 8px;
+}
+
+.app{
+  width:100%;
+  max-width:620px;
+  min-height:100vh;
+  margin:auto;
+  padding-bottom:92px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,8,9,.94),
+      rgba(2,2,3,.99)
+    );
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  padding:13px 15px 12px;
+  background:rgba(5,5,6,.91);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:0 12px 35px rgba(0,0,0,.55);
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:.2px;
+  color:var(--gold3);
+  text-shadow:0 0 18px rgba(246,211,107,.15);
+}
+
+.logo-mark{
+  width:37px;
+  height:37px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  border:1px solid var(--lineStrong);
+  background:
+    radial-gradient(circle at 50% 25%,rgba(246,211,107,.22),transparent 55%),
+    linear-gradient(145deg,#211806,#090909);
+  box-shadow:
+    inset 0 0 18px rgba(246,211,107,.06),
+    0 4px 18px rgba(0,0,0,.5);
+}
+
+.logo-text span{
+  color:#fff;
+}
+
+.cart{
+  min-width:51px;
+  height:40px;
+  border:1px solid var(--gold2);
+  border-radius:12px;
+  background:linear-gradient(145deg,#211806,#0b0b0d);
+  color:var(--gold3);
+  font-size:14px;
+  font-weight:bold;
+  box-shadow:
+    inset 0 0 15px rgba(246,211,107,.05),
+    0 4px 14px rgba(0,0,0,.4);
+}
+
+.cart:active{
+  transform:scale(.95);
+}
+
+.search{
+  margin-top:12px;
+  display:flex;
+  gap:8px;
+}
+
+.search input{
+  flex:1;
+  width:100%;
+  height:44px;
+  padding:0 14px;
+  border-radius:13px;
+  border:1px solid #303035;
+  background:#101012;
+  color:#fff;
+  outline:none;
+  font-size:12px;
+}
+
+.search input::placeholder{
+  color:#77777e;
+}
+
+.search input:focus{
+  border-color:var(--gold2);
+  box-shadow:0 0 0 3px rgba(246,211,107,.06);
+}
+
+.search button{
+  width:45px;
+  border:1px solid var(--gold2);
+  border-radius:13px;
+  background:linear-gradient(145deg,#241b09,#0b0b0d);
+  color:var(--gold3);
+  font-size:16px;
+}
+
+.page{
+  display:none;
+  padding-top:16px;
+}
+
+.page.active{
+  display:block;
+}
+
+section{
+  padding:0 15px 19px;
+}
+
+.hero{
+  margin:16px 15px 21px;
+  padding:25px 19px 20px;
+  border-radius:25px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(246,211,107,.52);
+  background:
+    radial-gradient(circle at 92% 5%,rgba(246,211,107,.18),transparent 30%),
+    radial-gradient(circle at 0 100%,rgba(151,102,24,.12),transparent 35%),
+    linear-gradient(145deg,#1a1409,#080809 58%,#100d08);
+  box-shadow:
+    0 20px 45px rgba(0,0,0,.65),
+    inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+.hero:before{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border:1px solid rgba(246,211,107,.13);
+  border-radius:20px;
+  pointer-events:none;
+}
+
+.hero:after{
+  content:"✦";
+  position:absolute;
+  left:15px;
+  top:5px;
+  font-size:76px;
+  color:rgba(246,211,107,.08);
+  transform:rotate(12deg);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:6px 11px;
+  border-radius:30px;
+  background:rgba(246,211,107,.08);
+  border:1px solid rgba(246,211,107,.27);
+  color:var(--gold3);
+  font-size:8px;
+  letter-spacing:1.2px;
+}
+
+.hero h1{
+  margin:13px 0 7px;
+  font-size:24px;
+  line-height:1.45;
+  color:#fff;
+}
+
+.hero h1 span{
+  color:var(--gold3);
+}
+
+.hero p{
+  margin:0 0 17px;
+  color:#aaa8a2;
+  font-size:11px;
+  line-height:1.9;
+}
+
+.hero-button{
+  width:100%;
+  height:47px;
+  border:1px solid #ffe29a;
+  border-radius:13px;
+  background:
+    linear-gradient(
+      110deg,
+      #ffeaa9,
+      #f1c75b 48%,
+      #a96f17
+    );
+  color:#171105;
+  font-size:12px;
+  font-weight:900;
+  box-shadow:
+    0 9px 25px rgba(246,211,107,.13),
+    inset 0 1px rgba(255,255,255,.55);
+}
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.section-head h2{
+  margin:0;
+  font-size:16px;
+  font-weight:900;
+}
+
+.section-head h2:after{
+  content:"";
+  display:block;
+  width:38px;
+  height:2px;
+  margin-top:6px;
+  border-radius:2px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+}
+
+.section-head span{
+  color:#77777d;
+  font-size:9px;
+}
+
+.categories{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:6px;
+  scrollbar-width:none;
+}
+
+.categories::-webkit-scrollbar{
+  display:none;
+}
+
+.category{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:9px 13px;
+  border-radius:20px;
+  background:linear-gradient(145deg,#131316,#080809);
+  border:1px solid #303036;
+  color:#96969c;
+  font-size:10px;
+}
+
+.category.active{
+  color:var(--gold3);
+  border-color:#b98327;
+  background:linear-gradient(135deg,#38290d,#120e07);
+  box-shadow:
+    0 0 18px rgba(246,211,107,.07),
+    inset 0 0 12px rgba(246,211,107,.035);
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.product{
+  position:relative;
+  overflow:hidden;
+  padding:7px;
+  border-radius:19px;
+  border:1px solid rgba(246,211,107,.30);
+  background:linear-gradient(155deg,#151515,#080809);
+  box-shadow:
+    0 14px 30px rgba(0,0,0,.48),
+    inset 0 0 0 1px rgba(255,255,255,.025);
+  transition:
+    transform .18s ease,
+    border-color .18s ease;
+}
+
+.product:active{
+  transform:scale(.975);
+  border-color:rgba(246,211,107,.62);
+}
+
+.product:before{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border:1px solid rgba(246,211,107,.09);
+  border-radius:15px;
+  pointer-events:none;
+}
+
+.product:after{
+  content:"";
+  position:absolute;
+  top:0;
+  right:18px;
+  width:40px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  box-shadow:0 0 10px rgba(246,211,107,.28);
+}
+
+.product-img{
+  height:126px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid rgba(246,211,107,.48);
+  background:
+    radial-gradient(circle at 50% 35%,rgba(246,211,107,.18),transparent 38%),
+    linear-gradient(145deg,#201807,#09090a);
+  box-shadow:
+    inset 0 0 0 4px rgba(246,211,107,.035),
+    inset 0 0 35px rgba(246,211,107,.06);
+}
+
+.product-img:before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  border:1px solid rgba(255,226,145,.18);
+  border-radius:10px;
+}
+
+.product-img:after{
+  content:"";
+  position:absolute;
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  border:1px solid rgba(246,211,107,.10);
+  box-shadow:0 0 35px rgba(246,211,107,.06);
+}
+
+.product-art{
+  position:relative;
+  z-index:2;
+  width:62px;
+  height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:18px;
+  background:linear-gradient(145deg,#33240c,#0d0c09);
+  border:1px solid rgba(246,211,107,.38);
+  font-size:31px;
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.65),
+    inset 0 0 18px rgba(246,211,107,.06);
+}
+
+.product h3{
+  margin:10px 3px 4px;
+  min-height:32px;
+  color:#fff;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.product p{
+  height:34px;
+  margin:0 3px 8px;
+  color:#85858c;
+  font-size:9px;
+  line-height:1.55;
+}
+
+.product-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:5px;
+  padding:0 2px 2px;
+}
+
+.price{
+  color:var(--gold3);
+  font-size:13px;
+  font-weight:900;
+  text-shadow:0 0 10px rgba(246,211,107,.13);
+}
+
+.buy{
+  padding:7px 9px;
+  border-radius:9px;
+  border:1px solid #b27e26;
+  background:linear-gradient(145deg,#29200d,#0f0d09);
+  color:var(--gold3);
+  font-size:9px;
+  font-weight:bold;
+}
+
+.back{
+  margin-bottom:12px;
+  padding:9px 13px;
+  border-radius:11px;
+  border:1px solid #4b3b1b;
+  background:linear-gradient(145deg,#1a150a,#0d0d0e);
+  color:#ddd;
+  font-size:11px;
+}
+
+.detail-card,
+.account-card{
+  position:relative;
+  padding:11px;
+  border-radius:22px;
+  border:1px solid rgba(246,211,107,.42);
+  background:linear-gradient(155deg,#15130e,#080809);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.55),
+    inset 0 0 0 1px rgba(246,211,107,.06);
+}
+
+.detail-card:before,
+.account-card:before{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border:1px solid rgba(246,211,107,.10);
+  border-radius:17px;
+  pointer-events:none;
+}
+
+.detail-img{
+  height:205px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:16px;
+  font-size:76px;
+  border:1px solid rgba(246,211,107,.55);
+  background:
+    radial-gradient(circle,rgba(246,211,107,.18),transparent 43%),
+    linear-gradient(145deg,#211807,#09090a);
+  box-shadow:
+    inset 0 0 0 4px rgba(246,211,107,.035),
+    inset 0 0 35px rgba(246,211,107,.07);
+}
+
+.detail-card h1{
+  margin:15px 3px 7px;
+  color:var(--gold3);
+  font-size:20px;
+}
+
+.detail-text{
+  color:#aaa8a3;
+  font-size:11px;
+  line-height:1.9;
+}
+
+.detail-section-title{
+  margin:18px 3px 9px;
+  color:var(--gold3);
+  font-size:13px;
+  font-weight:900;
+}
+
+.features{
+  margin:0;
+  padding:13px;
+  border-radius:13px;
+  background:#0b0b0d;
+  border:1px solid rgba(246,211,107,.16);
+  color:#d0cdc5;
+  font-size:10px;
+  line-height:2.05;
+}
+
+.feature-row{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  padding:4px 0;
+}
+
+.feature-check{
+  color:var(--gold3);
+  font-size:12px;
+  flex-shrink:0;
+}
+
+.receive-box{
+  margin-top:10px;
+  padding:13px;
+  border-radius:13px;
+  background:
+    linear-gradient(145deg,#17130a,#0a0a0b);
+  border:1px solid rgba(246,211,107,.22);
+  color:#cfcac0;
+  font-size:10px;
+  line-height:1.9;
+}
+
+.receive-row{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  padding:4px 0;
+}
+
+.receive-icon{
+  flex-shrink:0;
+  font-size:13px;
+}
+
+.detail-price{
+  margin:16px 0 12px;
+  padding:12px 13px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-radius:13px;
+  background:#0a0a0b;
+  border:1px solid rgba(246,211,107,.18);
+}
+
+.detail-price-label{
+  color:#88888f;
+  font-size:10px;
+}
+
+.detail-price-value{
+  color:var(--gold3);
+  font-size:21px;
+  font-weight:900;
+}
+
+.primary{
+  width:100%;
+  height:46px;
+  border:1px solid #ffe08a;
+  border-radius:13px;
+  background:
+    linear-gradient(
+      110deg,
+      #ffe69a,
+      #efc357 48%,
+      #a96f17
+    );
+  color:#151004;
+  font-size:12px;
+  font-weight:900;
+  box-shadow:
+    0 9px 25px rgba(246,211,107,.12),
+    inset 0 1px rgba(255,255,255,.5);
+}
+
+.primary:active,
+.hero-button:active{
+  transform:scale(.985);
+}
+
+.cart-item,
+.purchase-card{
+  margin-bottom:9px;
+  padding:11px;
+  border-radius:15px;
+  border:1px solid rgba(246,211,107,.25);
+  background:linear-gradient(155deg,#15130e,#09090a);
+}
+
+.cart-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.cart-icon,
+.purchase-icon{
+  width:43px;
+  height:43px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  border-radius:12px;
+  background:linear-gradient(145deg,#29200c,#0d0c09);
+  border:1px solid rgba(246,211,107,.25);
+  font-size:23px;
+}
+
+.cart-info,
+.purchase-info{
+  flex:1;
+}
+
+.cart-info b,
+.purchase-info b{
+  display:block;
+  font-size:11px;
+}
+
+.cart-info small,
+.purchase-info small{
+  display:block;
+  margin-top:4px;
+  color:#85858c;
+  font-size:9px;
+}
+
+.remove{
+  border:1px solid #542d2d;
+  background:#1b0e0e;
+  color:#ffaaaa;
+  border-radius:8px;
+  padding:7px 9px;
+}
+
+.account-card{
+  text-align:center;
+  padding:25px 17px;
+}
+
+.avatar{
+  width:72px;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 10px;
+  border-radius:22px;
+  border:1px solid rgba(246,211,107,.48);
+  background:
+    radial-gradient(circle at 50% 25%,rgba(246,211,107,.18),transparent 60%),
+    linear-gradient(145deg,#211807,#0a0a0a);
+  font-size:36px;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+}
+
+.user-name{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.user-info{
+  margin-top:6px;
+  color:#85858c;
+  font-size:10px;
+}
+
+.purchases-button{
+  width:100%;
+  margin-top:16px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #b98228;
+  background:linear-gradient(135deg,#2b210e,#0e0d0b);
+  color:var(--gold3);
+  font-size:11px;
+  font-weight:bold;
+}
+
+.purchase-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.purchase-price{
+  color:var(--gold3);
+  font-weight:bold;
+  font-size:11px;
+}
+
+.delivery{
+  margin-top:11px;
+  padding:11px;
+  border-radius:10px;
+  background:#0c0c0e;
+  border:1px solid rgba(246,211,107,.15);
+  color:#c6c4be;
+  font-size:10px;
+  line-height:1.8;
+}
+
+.delivery-title{
+  margin-bottom:5px;
+  color:var(--gold3);
+  font-weight:bold;
+}
+
+.loading,
+.empty{
+  padding:50px 15px;
+  text-align:center;
+  color:#77777e;
+  font-size:12px;
+  line-height:1.8;
+}
+
+.bottom{
+  position:fixed;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:620px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  z-index:100;
+  background:rgba(5,5,6,.94);
+  border-top:1px solid rgba(246,211,107,.22);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:0 -12px 35px rgba(0,0,0,.55);
+}
+
+.bottom button{
+  position:relative;
+  border:0;
+  background:none;
+  color:#6f7076;
+  padding:8px 3px 9px;
+  font-size:9px;
+}
+
+.bottom button.active{
+  color:var(--gold3);
+}
+
+.bottom button.active:before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:50%;
+  width:30px;
+  height:2px;
+  transform:translateX(-50%);
+  border-radius:5px;
+  background:var(--gold);
+  box-shadow:0 0 12px rgba(246,211,107,.5);
+}
+
+.bottom b{
+  display:block;
+  width:31px;
+  height:31px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 3px;
+  border-radius:10px;
+  font-size:17px;
+}
+
+.bottom button.active b{
+  background:linear-gradient(145deg,#2b210d,#100d08);
+  border:1px solid rgba(246,211,107,.20);
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:82px;
+  transform:translateX(-50%) translateY(20px);
+  width:calc(100% - 30px);
+  max-width:500px;
+  padding:12px;
+  border-radius:12px;
+  background:#15130d;
+  border:1px solid #8d6724;
+  color:#eee;
+  text-align:center;
+  font-size:10px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:200;
+  box-shadow:0 10px 30px #000;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+.success-overlay{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:300;
+  padding:22px;
+  background:rgba(0,0,0,.88);
+  backdrop-filter:blur(12px);
+}
+
+.success-overlay.show{
+  display:flex;
+}
+
+.success-box{
+  width:100%;
+  max-width:390px;
+  padding:28px 20px;
+  text-align:center;
+  border-radius:24px;
+  border:1px solid rgba(246,211,107,.58);
+  background:
+    radial-gradient(circle at 50% 0,rgba(246,211,107,.17),transparent 42%),
+    #0b0b0c;
+  box-shadow:0 0 70px rgba(246,211,107,.12);
+}
+
+.success-icon{
+  font-size:65px;
+  animation:pop .65s ease;
+}
+
+.success-box h2{
+  margin:8px 0;
+  color:var(--gold3);
+  font-size:23px;
+}
+
+.success-box p{
+  color:#aaaab0;
+  font-size:11px;
+  line-height:1.8;
+}
+
+.success-box button{
+  margin-top:8px;
+}
+
+@keyframes pop{
+  0%{
+    transform:scale(.3);
+    opacity:0;
+  }
+  70%{
+    transform:scale(1.12);
+  }
+  100%{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.confetti{
+  position:fixed;
+  top:-20px;
+  width:7px;
+  height:13px;
+  z-index:301;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  to{
+    transform:
+      translate3d(var(--x),110vh,0)
+      rotate(720deg);
+    opacity:.1;
+  }
+}
+
+.admin-open-button{
+  display:none;
+  position:fixed;
+  right:15px;
+  bottom:85px;
+  z-index:99998;
+  background:
+    linear-gradient(
+      145deg,
+      #ffe8a0,
+      #d4af37,
+      #9a6b20
+    );
+  color:#080808;
+  border:1px solid #ffe8a0;
+  border-radius:14px;
+  padding:11px 16px;
+  font-weight:900;
+  font-size:12px;
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.55),
+    0 0 18px rgba(246,211,107,.12);
+}
+
+.admin-panel{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:#080808;
+  color:#fff;
+  overflow:auto;
+  font-family:Arial,Tahoma,sans-serif;
+  padding:20px;
+}
+
+.admin-container{
+  max-width:900px;
+  margin:auto;
+}
+
+.admin-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.admin-brand{
+  color:#d4af37;
+  font-size:13px;
+}
+
+.admin-title{
+  margin:5px 0;
+  font-size:24px;
+}
+
+.admin-close{
+  background:#222;
+  color:#fff;
+  border:1px solid #555;
+  padding:10px 15px;
+  border-radius:10px;
+  font-size:16px;
+}
+
+.admin-loading{
+  text-align:center;
+  padding:50px;
+  color:#d4af37;
+}
+
+.admin-content{
+  display:none;
+}
+
+.admin-stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-bottom:25px;
+}
+
+.admin-stat{
+  background:#151515;
+  border:1px solid #333;
+  border-radius:15px;
+  padding:18px;
+}
+
+.admin-stat-label{
+  color:#aaa;
+  margin-bottom:5px;
+}
+
+.admin-stat-value{
+  font-size:28px;
+}
+
+.admin-stat-stars{
+  color:#d4af37;
+}
+
+.admin-orders-title{
+  color:#d4af37;
+  margin-bottom:15px;
+}
+
+.admin-order{
+  background:#151515;
+  border:1px solid #333;
+  border-radius:15px;
+  padding:16px;
+  margin-bottom:10px;
+}
+
+.admin-product{
+  color:#d4af37;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.admin-order-info{
+  margin-top:8px;
+  font-size:12px;
+  color:#ddd;
+}
+
+.admin-order-user{
+  color:#aaa;
+  font-size:12px;
+  margin-top:7px;
+}
+
+.admin-order-date{
+  color:#777;
+  font-size:11px;
+  margin-top:7px;
+}
+
+.admin-order-status{
+  margin-top:9px;
+  font-weight:bold;
+  font-size:12px;
+}
+
+.admin-empty{
+  background:#151515;
+  border:1px solid #333;
+  border-radius:15px;
+  padding:35px 20px;
+  text-align:center;
+  color:#aaa;
+}
+
+.admin-error{
+  color:#ff5555;
+  font-size:14px;
+  line-height:1.8;
+}
+
+.admin-retry{
+  background:#d4af37;
+  color:#080808;
+  border:0;
+  border-radius:10px;
+  padding:10px 18px;
+  font-weight:bold;
+}
+
+@media(max-width:360px){
+
+  .logo{
+    font-size:18px;
+  }
+
+  .logo-mark{
+    width:34px;
+    height:34px;
+  }
+
+  .hero h1{
+    font-size:21px;
+  }
+
+  .products{
+    gap:8px;
+  }
+
+  .product-img{
+    height:112px;
+  }
+
+  .product-art{
+    width:56px;
+    height:56px;
+    font-size:27px;
+  }
+
+  .admin-panel{
+    padding:14px;
+  }
+
+  .admin-title{
+    font-size:20px;
+  }
+
+}
+
+@media(max-width:500px){
+
+  .admin-stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+
+  <div class="top">
+
+    <div class="logo">
+
+      <div class="logo-mark">
+        👑
+      </div>
+
+      <div class="logo-text">
+        Empire <span>Digital</span>
+      </div>
+
+    </div>
+
+    <button
+      class="cart"
+      onclick="openCart()"
+    >
+      🛒 <span id="cartCount">0</span>
+    </button>
+
+  </div>
+
+  <div class="search">
+
+    <input
+      id="searchInput"
+      placeholder="🔎 ابحث عن منتج..."
+      oninput="searchProducts()"
+    >
+
+    <button onclick="searchProducts()">
+      ⌕
+    </button>
+
+  </div>
+
+</header>
+
+<div id="homePage" class="page active">
+
+  <div class="hero">
+
+    <div class="hero-content">
+
+      <div class="badge">
+        ✦ PREMIUM DIGITAL STORE
+      </div>
+
+      <h1>
+        عالمك الرقمي<br>
+        <span>بلمسة احترافية ✨</span>
+      </h1>
+
+      <p>
+        تصاميم، قوالب وأدوات رقمية جاهزة للاستخدام،
+        بجودة فاخرة وتجربة شراء سهلة وآمنة عبر Telegram.
+      </p>
+
+      <button
+        class="hero-button"
+        onclick="showStore()"
+      >
+        🛍️ اكتشف المتجر
+      </button>
+
+    </div>
+
+  </div>
+
+  <section>
+
+    <div class="section-head">
+      <h2>التصنيفات</h2>
+    </div>
+
+    <div class="categories">
+
+      <button
+        class="category active"
+        onclick="filterCategory('all',this)"
+      >
+        ✦ الكل
+      </button>
+
+      <button
+        class="category"
+        onclick="filterCategory('design',this)"
+      >
+        🎨 تصاميم
+      </button>
+
+      <button
+        class="category"
+        onclick="filterCategory('social',this)"
+      >
+        📱 سوشيال
+      </button>
+
+      <button
+        class="category"
+        onclick="filterCategory('business',this)"
+      >
+        💼 أعمال
+      </button>
+
+      <button
+        class="category"
+        onclick="filterCategory('tools',this)"
+      >
+        🤖 أدوات
+      </button>
+
+    </div>
+
+  </section>
+
+  <section>
+
+    <div class="section-head">
+
+      <h2>
+        منتجات مميزة 🔥
+      </h2>
+
+      <span id="productCount">
+        4 منتجات
+      </span>
+
+    </div>
+
+    <div
+      class="products"
+      id="products"
+    ></div>
+
+  </section>
+
+</div>
+
+<div id="storePage" class="page">
+
+  <section>
+
+    <div class="section-head">
+      <h2>🛍️ المتجر</h2>
+    </div>
+
+    <div
+      class="products"
+      id="storeProducts"
+    ></div>
+
+  </section>
+
+</div>
+
+<div id="detailPage" class="page">
+
+  <section>
+
+    <button
+      class="back"
+      onclick="showStore()"
+    >
+      ↩️ العودة للمتجر
+    </button>
+
+    <div class="detail-card">
+
+      <div
+        class="detail-img"
+        id="detailImg"
+      ></div>
+
+      <h1 id="detailName"></h1>
+
+      <div
+        class="detail-text"
+        id="detailDescription"
+      ></div>
+
+      <div class="detail-section-title">
+        📦 ماذا تحتوي هذه الحزمة؟
+      </div>
+
+      <div
+        class="features"
+        id="detailFeatures"
+      ></div>
+
+      <div class="detail-section-title">
+        🎁 ماذا تحصل بعد الدفع؟
+      </div>
+
+      <div
+        class="receive-box"
+        id="detailReceive"
+      ></div>
+
+      <div class="detail-price">
+
+        <span class="detail-price-label">
+          سعر الحزمة
+        </span>
+
+        <span
+          class="detail-price-value"
+          id="detailPrice"
+        ></span>
+
+      </div>
+
+      <button
+        class="primary"
+        onclick="addCurrentToCart()"
+      >
+        🛒 إضافة إلى السلة
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
+
+<div id="cartPage" class="page">
+
+  <section>
+
+    <div class="section-head">
+      <h2>🛒 سلة المشتريات</h2>
+    </div>
+
+    <div id="cartItems"></div>
+
+    <div id="cartTotal"></div>
+
+  </section>
+
+</div>
+
+<div id="accountPage" class="page">
+
+  <section>
+
+    <div class="section-head">
+      <h2>👤 حسابي</h2>
+    </div>
+
+    <div class="account-card">
+
+      <div class="avatar">
+        👑
+      </div>
+
+      <div
+        class="user-name"
+        id="userName"
+      >
+        زائر Empire Digital
+      </div>
+
+      <div
+        class="user-info"
+        id="userInfo"
+      >
+        حسابك ومشترياتك الرقمية.
+      </div>
+
+      <button
+        class="purchases-button"
+        onclick="openPurchases()"
+      >
+        📦 مشترياتي
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
+
+<div id="purchasesPage" class="page">
+
+  <section>
+
+    <button
+      class="back"
+      onclick="openAccount()"
+    >
+      ↩️ العودة للحساب
+    </button>
+
+    <div class="section-head">
+
+      <h2>📦 مشترياتي</h2>
+
+      <span id="purchaseCount">
+        0 منتجات
+      </span>
+
+    </div>
+
+    <div id="purchasesList"></div>
+
+  </section>
+
+</div>
+
+</div>
+
+<div class="bottom">
+
+  <button
+    id="navHome"
+    class="active"
+    onclick="showHome()"
+  >
+    <b>⌂</b>
+    الرئيسية
+  </button>
+
+  <button
+    id="navStore"
+    onclick="showStore()"
+  >
+    <b>▣</b>
+    المتجر
+  </button>
+
+  <button
+    id="navCart"
+    onclick="openCart()"
+  >
+    <b>🛒</b>
+    السلة
+  </button>
+
+  <button
+    id="navAccount"
+    onclick="openAccount()"
+  >
+    <b>♙</b>
+    حسابي
+  </button>
+
+</div>
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+<div
+  class="success-overlay"
+  id="successOverlay"
+>
+
+  <div class="success-box">
+
+    <div class="success-icon">
+      🎉
+    </div>
+
+    <h2>
+      Félicitations !
+    </h2>
+
+    <p id="successText">
+      تم تأكيد الدفع بنجاح.<br>
+      شكرًا لشرائك من Empire Digital.
+    </p>
+
+    <button
+      class="primary"
+      onclick="closeSuccess()"
+    >
+      📦 عرض مشترياتي
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+/* ================= TELEGRAM ================= */
+
+const tg =
+  window.Telegram?.WebApp;
+
+if(tg){
+
+  tg.ready();
+  tg.expand();
+
+}
+
+
+/* =========================================================
+   AFFILIATE SYSTEM
+   نظام المسوّقين - عمولة 20%
+   ========================================================= */
+
+let affiliateCode = "";
+
+try{
+
+  const savedAffiliate =
+    localStorage.getItem(
+      "empireDigitalAffiliate"
+    );
+
+  if(savedAffiliate){
+    affiliateCode =
+      savedAffiliate.trim();
+  }
+
+}catch(error){
+
+  console.warn(
+    "Affiliate localStorage read error:",
+    error
+  );
+
+}
+
+
+/*
+  Telegram Mini App يرسل startapp
+  داخل tg.initDataUnsafe.start_param
+*/
+
+if(tg){
+
+  const telegramStartParam =
+    tg.initDataUnsafe?.start_param || "";
+
+  if(telegramStartParam){
+
+    affiliateCode =
+      telegramStartParam.trim();
+
+    try{
+
+      localStorage.setItem(
+        "empireDigitalAffiliate",
+        affiliateCode
+      );
+
+    }catch(error){
+
+      console.warn(
+        "Affiliate localStorage save error:",
+        error
+      );
+
+    }
+
+  }
+
+}
+
+
+/*
+  احتياط إضافي إذا ظهر start parameter
+  في رابط Mini App.
+*/
+
+if(!affiliateCode){
+
+  try{
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    const urlAffiliate =
+      params.get(
+        "tgWebAppStartParam"
+      ) ||
+      params.get(
+        "startapp"
+      );
+
+    if(urlAffiliate){
+
+      affiliateCode =
+        urlAffiliate.trim();
+
+      localStorage.setItem(
+        "empireDigitalAffiliate",
+        affiliateCode
+      );
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Affiliate URL read error:",
+      error
+    );
+
+  }
+
+}
+
+console.log(
+  "Empire Digital Affiliate:",
+  affiliateCode || "none"
+);
+
+
+/* ================= PRODUCTS ================= */
+
+const products=[
+
+  {
+    id:1,
+    name:"حزمة التصاميم الإعلانية",
+    category:"design",
+    icon:"🎨",
+    price:100,
+
+    description:
+      "حزمة رقمية مخصصة لأصحاب المحلات والخدمات والمشاريع، تحتوي على تصاميم إعلانية جاهزة للاستخدام.",
+
+    features:[
+      "20 تصميمًا إعلانيًا احترافيًا",
+      "تصاميم مناسبة للمحلات والخدمات",
+      "مناسبة للمنشورات والإعلانات",
+      "ملفات رقمية جاهزة للاستخدام",
+      "توفر عليك وقت تصميم الإعلانات من الصفر"
+    ],
+
+    receive:[
+      "الوصول إلى محتوى الحزمة بعد نجاح الدفع",
+      "المنتج يظهر داخل قسم مشترياتي",
+      "محتوى رقمي جاهز للاستخدام",
+      "الحزمة متاحة للشراء بشكل غير محدود"
+    ]
+  },
+
+
+  {
+    id:2,
+    name:"حزمة Social Media",
+    category:"social",
+    icon:"📱",
+    price:100,
+
+    description:
+      "مجموعة قوالب رقمية لإنشاء منشورات وStories احترافية بسرعة لمختلف حسابات التواصل الاجتماعي.",
+
+    features:[
+      "30 قالب منشور",
+      "20 قالب Story",
+      "قوالب مناسبة للسوشيال ميديا",
+      "تصاميم قابلة للتعديل",
+      "مناسبة للصفحات والمشاريع والمتاجر"
+    ],
+
+    receive:[
+      "الوصول إلى محتوى الحزمة بعد نجاح الدفع",
+      "ظهور المنتج داخل قسم مشترياتي",
+      "قوالب رقمية جاهزة للاستخدام والتعديل",
+      "الحزمة متاحة للشراء بشكل غير محدود"
+    ]
+  },
+
+
+  {
+    id:3,
+    name:"حزمة الأعمال",
+    category:"business",
+    icon:"💼",
+    price:150,
+
+    description:
+      "مجموعة قوالب عملية لأصحاب المشاريع والعمل الحر، تساعدك على تنظيم وتقديم أعمالك بصورة احترافية.",
+
+    features:[
+      "قالب CV احترافي",
+      "فاتورة جاهزة",
+      "قالب عرض أسعار",
+      "بطاقة أعمال",
+      "أدوات مناسبة لأصحاب المشاريع والعمل الحر"
+    ],
+
+    receive:[
+      "الوصول إلى محتوى الحزمة بعد نجاح الدفع",
+      "ظهور المنتج داخل قسم مشترياتي",
+      "قوالب رقمية جاهزة للاستخدام",
+      "الحزمة متاحة للشراء بشكل غير محدود"
+    ]
+  },
+
+
+  {
+    id:4,
+    name:"حزمة الأدوات الرقمية",
+    category:"tools",
+    icon:"🤖",
+    price:150,
+
+    description:
+      "مجموعة أدوات رقمية مفيدة للاستخدام اليومي تساعدك في الحسابات والتخطيط والأفكار التسويقية والإنتاجية.",
+
+    features:[
+      "حاسبة الأرباح",
+      "حاسبة الأسعار",
+      "أفكار تسويقية",
+      "أدوات إنتاجية",
+      "مجموعة أدوات رقمية في حزمة واحدة"
+    ],
+
+    receive:[
+      "الوصول إلى محتوى الحزمة بعد نجاح الدفع",
+      "ظهور المنتج داخل قسم مشترياتي",
+      "أدوات رقمية جاهزة للاستخدام",
+      "الحزمة متاحة للشراء بشكل غير محدود"
+    ]
+  }
+
+];
+
+
+let cart =
+  JSON.parse(
+    localStorage.getItem(
+      "empireDigitalCart"
+    ) || "[]"
+  );
+
+let currentProduct=null;
+
+let currentCategory="all";
+
+
+/* ================= CART ================= */
+
+function saveCart(){
+
+  localStorage.setItem(
+    "empireDigitalCart",
+    JSON.stringify(cart)
+  );
+
+  renderCartCount();
+
+}
+
+
+function renderCartCount(){
+
+  document.getElementById(
+    "cartCount"
+  ).textContent =
+    cart.length;
+
+}
+
+
+/* ================= PRODUCT CARD ================= */
+
+function productCard(p){
+
+  return `
+
+    <div class="product">
+
+      <div
+        class="product-img"
+        onclick="openProduct(${p.id})"
+      >
+
+        <span class="product-art">
+          ${p.icon}
+        </span>
+
+      </div>
+
+      <h3>
+        ${p.name}
+      </h3>
+
+      <p>
+        ${p.description}
+      </p>
+
+      <div class="product-bottom">
+
+        <div class="price">
+          ⭐ ${p.price}
+        </div>
+
+        <button
+          class="buy"
+          onclick="openProduct(${p.id})"
+        >
+          عرض التفاصيل
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ================= RENDER ================= */
+
+function renderProducts(
+  list=products
+){
+
+  const html =
+    list
+      .map(productCard)
+      .join("");
+
+  document.getElementById(
+    "products"
+  ).innerHTML =
+    html;
+
+  document.getElementById(
+    "storeProducts"
+  ).innerHTML =
+    html;
+
+  document.getElementById(
+    "productCount"
+  ).textContent =
+    list.length +
+    " منتجات";
+
+}
+
+
+/* ================= PRODUCT DETAIL ================= */
+
+function openProduct(id){
+
+  currentProduct =
+    products.find(
+      p=>p.id===id
+    );
+
+  if(!currentProduct)
+    return;
+
+  document.getElementById(
+    "detailImg"
+  ).textContent =
+    currentProduct.icon;
+
+  document.getElementById(
+    "detailName"
+  ).textContent =
+    currentProduct.name;
+
+  document.getElementById(
+    "detailDescription"
+  ).textContent =
+    currentProduct.description;
+
+  document.getElementById(
+    "detailPrice"
+  ).textContent =
+    "⭐ " +
+    currentProduct.price;
+
+  document.getElementById(
+    "detailFeatures"
+  ).innerHTML =
+    currentProduct.features
+      .map(
+        x=>`
+          <div class="feature-row">
+            <span class="feature-check">✓</span>
+            <span>${x}</span>
+          </div>
+        `
+      )
+      .join("");
+
+  document.getElementById(
+    "detailReceive"
+  ).innerHTML =
+    currentProduct.receive
+      .map(
+        x=>`
+          <div class="receive-row">
+            <span class="receive-icon">✓</span>
+            <span>${x}</span>
+          </div>
+        `
+      )
+      .join("");
+
+  showPage(
+    "detailPage"
+  );
+
+}
+
+
+/* ================= ADD CART ================= */
+
+function addCurrentToCart(){
+
+  if(!currentProduct)
+    return;
+
+  if(
+    !cart.includes(
+      currentProduct.id
+    )
+  ){
+
+    cart.push(
+      currentProduct.id
+    );
+
+    saveCart();
+
+    message(
+      "✅ تمت إضافة المنتج إلى السلة."
+    );
+
+  }else{
+
+    message(
+      "ℹ️ المنتج موجود بالفعل في السلة."
+    );
+
+  }
+
+}
+
+
+/* ================= OPEN CART ================= */
+
+function openCart(){
+
+  renderCart();
+
+  showPage(
+    "cartPage"
+  );
+
+}
+
+
+/* ================= RENDER CART ================= */
+
+function renderCart(){
+
+  const box =
+    document.getElementById(
+      "cartItems"
+    );
+
+  if(!cart.length){
+
+    box.innerHTML = `
+
+      <div class="empty">
+
+        🛒<br>
+
+        السلة فارغة
+
+        <br><br>
+
+        أضف بعض المنتجات للبدء.
+
+      </div>
+
+    `;
+
+    document.getElementById(
+      "cartTotal"
+    ).innerHTML="";
+
+    return;
+
+  }
+
+  let total=0;
+
+  box.innerHTML =
+
+    cart.map(id=>{
+
+      const p =
+        products.find(
+          x=>x.id===id
+        );
+
+      if(!p)
+        return "";
+
+      total += p.price;
+
+      return `
+
+        <div class="cart-item">
+
+          <div class="cart-icon">
+            ${p.icon}
+          </div>
+
+          <div class="cart-info">
+
+            <b>
+              ${p.name}
+            </b>
+
+            <small>
+              ⭐ ${p.price} Stars
+            </small>
+
+          </div>
+
+          <button
+            class="remove"
+            onclick="removeCart(${p.id})"
+          >
+            ✕
+          </button>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+  document.getElementById(
+    "cartTotal"
+  ).innerHTML = `
+
+    <div class="detail-card">
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          margin-bottom:12px
+        "
+      >
+
+        <b>
+          المجموع
+        </b>
+
+        <strong
+          style="color:#f5d36b"
+        >
+          ⭐ ${total}
+        </strong>
+
+      </div>
+
+      <button
+        class="primary"
+        onclick="checkout()"
+      >
+        💳 الانتقال للدفع
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ================= REMOVE ================= */
+
+function removeCart(id){
+
+  cart =
+    cart.filter(
+      x=>x!==id
+    );
+
+  saveCart();
+
+  renderCart();
+
+  message(
+    "🗑️ تم حذف المنتج."
+  );
+
+}
+
+
+/* ================= CHECKOUT ================= */
+
+async function checkout(){
+
+  if(!cart.length){
+
+    message(
+      "🛒 السلة فارغة."
+    );
+
+    return;
+
+  }
+
+  if(cart.length>1){
+
+    message(
+      "💡 للدفع الآن اختر منتجًا واحدًا فقط."
+    );
+
+    return;
+
+  }
+
+  const product =
+    products.find(
+      p=>p.id===cart[0]
+    );
+
+  if(!product){
+
+    message(
+      "❌ المنتج غير موجود."
+    );
+
+    return;
+
+  }
+
+  const backendIds={
+
+    1:"design-pack",
+
+    2:"social-pack",
+
+    3:"business-pack",
+
+    4:"digital-tools"
+
+  };
+
+  const backendProductId =
+    backendIds[
+      product.id
+    ];
+
+  if(!backendProductId){
+
+    message(
+      "❌ خطأ في المنتج."
+    );
+
+    return;
+
+  }
+
+  message(
+    "⏳ جاري تجهيز فاتورة الدفع..."
+  );
+
+  try{
+
+    const response =
+      await fetch(
+
+        "https://glgkwcrwytuajlakgawi.supabase.co/functions/v1/create-invoice",
+
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              productId:
+                backendProductId,
+
+              /* =========================
+                 AFFILIATE CODE
+                 ========================= */
+
+              affiliateCode:
+                affiliateCode || ""
+
+            })
+
+        }
+
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      throw new Error(
+        data.error ||
+        "فشل إنشاء الفاتورة"
+      );
+
+    }
+
+    if(!data.invoiceLink){
+
+      throw new Error(
+        "لم يتم الحصول على رابط الدفع"
+      );
+
+    }
+
+    if(
+      tg &&
+      typeof tg.openInvoice ===
+        "function"
+    ){
+
+      tg.openInvoice(
+
+        data.invoiceLink,
+
+        status=>{
+
+          if(
+            status==="paid"
+          ){
+
+            cart=[];
+
+            saveCart();
+
+            renderCart();
+
+            showSuccess(
+              product.name
+            );
+
+          }
+
+          else if(
+            status==="cancelled"
+          ){
+
+            message(
+              "تم إلغاء عملية الدفع."
+            );
+
+          }
+
+          else if(
+            status==="failed"
+          ){
+
+            message(
+              "❌ فشل الدفع. حاول مرة أخرى."
+            );
+
+          }
+
+          else if(
+            status==="pending"
+          ){
+
+            message(
+              "⏳ الدفع قيد المعالجة."
+            );
+
+          }
+
+        }
+
+      );
+
+    }else{
+
+      message(
+        "⚠️ يجب فتح المتجر من داخل Telegram."
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "CREATE INVOICE ERROR:",
+      error
+    );
+
+    message(
+      "❌ حدث خطأ أثناء إنشاء الفاتورة."
+    );
+
+  }
+
+}
+
+
+/* ================= SEARCH ================= */
+
+function searchProducts(){
+
+  const q =
+    document
+      .getElementById(
+        "searchInput"
+      )
+      .value
+      .trim()
+      .toLowerCase();
+
+  const list =
+    q
+
+      ? products.filter(
+
+          p=>
+
+            p.name
+              .toLowerCase()
+              .includes(q)
+
+            ||
+
+            p.description
+              .toLowerCase()
+              .includes(q)
+
+        )
+
+      : products;
+
+  renderProducts(list);
+
+  showPage(
+    "storePage"
+  );
+
+}
+
+
+/* ================= CATEGORY ================= */
+
+function filterCategory(
+  category,
+  button
+){
+
+  currentCategory =
+    category;
+
+  document
+    .querySelectorAll(
+      ".category"
+    )
+    .forEach(
+      x=>
+        x.classList.remove(
+          "active"
+        )
+    );
+
+  button.classList.add(
+    "active"
+  );
+
+  const list =
+    category==="all"
+
+      ? products
+
+      : products.filter(
+          p=>
+            p.category===
+            category
+        );
+
+  renderProducts(list);
+
+  showPage(
+    "storePage"
+  );
+
+}
+
+
+/* ================= PAGE ================= */
+
+function showPage(id){
+
+  document
+    .querySelectorAll(
+      ".page"
+    )
+    .forEach(
+      p=>
+        p.classList.remove(
+          "active"
+        )
+    );
+
+  document
+    .getElementById(id)
+    .classList.add(
+      "active"
+    );
+
+  updateNav(id);
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+/* ================= NAV ================= */
+
+function updateNav(page){
+
+  document
+    .querySelectorAll(
+      ".bottom button"
+    )
+    .forEach(
+      b=>
+        b.classList.remove(
+          "active"
+        )
+    );
+
+  if(
+    page==="homePage"
+  )
+    document
+      .getElementById(
+        "navHome"
+      )
+      .classList.add(
+        "active"
+      );
+
+  if(
+    page==="storePage"
+  )
+    document
+      .getElementById(
+        "navStore"
+      )
+      .classList.add(
+        "active"
+      );
+
+  if(
+    page==="cartPage"
+  )
+    document
+      .getElementById(
+        "navCart"
+      )
+      .classList.add(
+        "active"
+      );
+
+  if(
+    page==="accountPage" ||
+    page==="purchasesPage"
+  )
+    document
+      .getElementById(
+        "navAccount"
+      )
+      .classList.add(
+        "active"
+      );
+
+}
+
+
+/* ================= HOME ================= */
+
+function showHome(){
+
+  showPage(
+    "homePage"
+  );
+
+}
+
+
+/* ================= STORE ================= */
+
+function showStore(){
+
+  renderProducts();
+
+  showPage(
+    "storePage"
+  );
+
+}
+
+
+/* ================= ACCOUNT ================= */
+
+function openAccount(){
+
+  if(
+    tg?.initDataUnsafe?.user
+  ){
+
+    const user =
+      tg.initDataUnsafe.user;
+
+    const fullName =
+      [
+        user.first_name,
+        user.last_name
+      ]
+      .filter(Boolean)
+      .join(" ");
+
+    document.getElementById(
+      "userName"
+    ).textContent =
+      fullName ||
+      "مستخدم Telegram";
+
+    document.getElementById(
+      "userInfo"
+    ).textContent =
+      "حساب Telegram الخاص بك.";
+
+  }else{
+
+    document.getElementById(
+      "userName"
+    ).textContent =
+      "زائر Empire Digital";
+
+    document.getElementById(
+      "userInfo"
+    ).textContent =
+      "افتح المتجر من داخل Telegram.";
+
+  }
+
+  showPage(
+    "accountPage"
+  );
+
+}
+
+
+/* ================= PURCHASES ================= */
+
+async function openPurchases(){
+
+  showPage(
+    "purchasesPage"
+  );
+
+  const box =
+    document.getElementById(
+      "purchasesList"
+    );
+
+  const count =
+    document.getElementById(
+      "purchaseCount"
+    );
+
+  box.innerHTML = `
+
+    <div class="loading">
+
+      ⏳ جاري تحميل مشترياتك...
+
+    </div>
+
+  `;
+
+  count.textContent =
+    "...";
+
+  if(
+    !tg ||
+    !tg.initData
+  ){
+
+    box.innerHTML = `
+
+      <div class="empty">
+
+        ⚠️ يجب فتح المتجر
+        من داخل Telegram
+
+      </div>
+
+    `;
+
+    count.textContent =
+      "0 منتجات";
+
+    return;
+
+  }
+
+  try{
+
+    const response =
+      await fetch(
+
+        "https://glgkwcrwytuajlakgawi.supabase.co/functions/v1/my-purchases",
+
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              initData:
+                tg.initData
+
+            })
+
+          }
+
+        );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      throw new Error(
+        data.error ||
+        "فشل تحميل المشتريات"
+      );
+
+    }
+
+    const purchases =
+      data.purchases || [];
+
+    count.textContent =
+      purchases.length +
+      " منتجات";
+
+    if(!purchases.length){
+
+      box.innerHTML = `
+
+        <div class="empty">
+
+          📦<br>
+
+          لا توجد مشتريات بعد.
+
+          <br><br>
+
+          ابدأ بشراء أول منتج
+          رقمي من المتجر.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+    box.innerHTML =
+
+      purchases.map(
+        p=>{
+
+          const date =
+            p.purchasedAt
+
+              ? new Date(
+                  p.purchasedAt
+                )
+                .toLocaleDateString(
+                  "ar-DZ"
+                )
+
+              : "";
+
+          return `
+
+            <div class="purchase-card">
+
+              <div class="purchase-top">
+
+                <div class="purchase-icon">
+                  ${p.icon||"📦"}
+                </div>
+
+                <div class="purchase-info">
+
+                  <b>
+                    ${p.productName||"منتج رقمي"}
+                  </b>
+
+                  <small>
+                    ${date}
+                  </small>
+
+                </div>
+
+                <div class="purchase-price">
+                  ⭐ ${p.amountStars||0}
+                </div>
+
+              </div>
+
+              <div class="delivery">
+
+                <div class="delivery-title">
+                  🎁 محتوى المنتج
+                </div>
+
+                ${
+                  p.deliveryContent ||
+                  "سيتم تسليم المحتوى قريبًا."
+                }
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      ).join("");
+
+  }catch(error){
+
+    console.error(
+      "MY PURCHASES ERROR:",
+      error
+    );
+
+    box.innerHTML = `
+
+      <div class="empty">
+
+        ❌ حدث خطأ أثناء
+        تحميل مشترياتك.
+
+        <br><br>
+
+        حاول مرة أخرى.
+
+      </div>
+
+    `;
+
+    count.textContent =
+      "0 منتجات";
+
+  }
+
+}
+
+
+/* ================= SUCCESS ================= */
+
+function showSuccess(
+  productName
+){
+
+  document.getElementById(
+    "successText"
+  ).innerHTML =
+
+    `تم الدفع بنجاح لمنتج:<br>
+     <strong style="color:#fff">
+       ${productName}
+     </strong>
+     <br><br>
+     شكرًا لشرائك من Empire Digital.`;
+
+  document
+    .getElementById(
+      "successOverlay"
+    )
+    .classList.add(
+      "show"
+    );
+
+  createConfetti();
+
+}
+
+
+/* ================= CLOSE SUCCESS ================= */
+
+function closeSuccess(){
+
+  document
+    .getElementById(
+      "successOverlay"
+    )
+    .classList.remove(
+      "show"
+    );
+
+  openPurchases();
+
+}
+
+
+/* ================= CONFETTI ================= */
+
+function createConfetti(){
+
+  for(
+    let i=0;
+    i<34;
+    i++
+  ){
+
+    const c =
+      document.createElement(
+        "div"
+      );
+
+    c.className =
+      "confetti";
+
+    c.style.left =
+      Math.random()*100 +
+      "%";
+
+    c.style.setProperty(
+      "--x",
+      (
+        Math.random()*260 -
+        130
+      ) + "px"
+    );
+
+    c.style.animationDuration =
+      (
+        2 +
+        Math.random()*2.5
+      ) + "s";
+
+    c.style.background = [
+
+      "#f5d36b",
+      "#fff",
+      "#c8942f",
+      "#8f6a24"
+
+    ][i%4];
+
+    c.style.transform =
+      `rotate(
+        ${Math.random()*360}deg
+      )`;
+
+    document.body.appendChild(c);
+
+    setTimeout(
+      ()=>c.remove(),
+      5000
+    );
+
+  }
+
+}
+
+
+/* ================= MESSAGE ================= */
+
+function message(text){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent =
+    text;
+
+  toast.classList.add(
+    "show"
+  );
+
+  setTimeout(
+    ()=>toast.classList.remove(
+      "show"
+    ),
+    2200
+  );
+
+}
+
+
+/* ================= START ================= */
+
+renderProducts();
+
+renderCartCount();
+
+
+/* =========================================================
+   EMPIRE DIGITAL ADMIN
+   ========================================================= */
+
+const ADMIN_ID =
+  "7594685301";
+
+const ADMIN_FUNCTION_URL =
+  "https://glgkwcrwytuajlakgawi.supabase.co/functions/v1/admin-dashboard";
+
+
+/* ================= ADMIN BUTTON ================= */
+
+function setupAdminButton(){
+
+  try{
+
+    const telegram =
+      window.Telegram?.WebApp;
+
+    const user =
+      telegram?.initDataUnsafe?.user;
+
+    const button =
+      document.getElementById(
+        "adminOpenButton"
+      );
+
+    if(
+      button &&
+      user &&
+      String(user.id) === ADMIN_ID
+    ){
+
+      button.style.display =
+        "block";
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "ADMIN BUTTON ERROR:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ================= OPEN ADMIN ================= */
+
+async function openAdmin(){
+
+  const telegram =
+    window.Telegram?.WebApp;
+
+  if(!telegram){
+
+    alert(
+      "افتح المتجر من داخل Telegram"
+    );
+
+    return;
+
+  }
+
+  if(!telegram.initData){
+
+    alert(
+      "لم يتم الحصول على بيانات Telegram."
+    );
+
+    return;
+
+  }
+
+  const adminPanel =
+    document.getElementById(
+      "adminPanel"
+    );
+
+  const loading =
+    document.getElementById(
+      "adminLoading"
+    );
+
+  const content =
+    document.getElementById(
+      "adminContent"
+    );
+
+  adminPanel.style.display =
+    "block";
+
+  loading.style.display =
+    "block";
+
+  content.style.display =
+    "none";
+
+  loading.innerHTML = `
+
+    <div style="
+      font-size:30px;
+      margin-bottom:10px;
+    ">
+      ⏳
+    </div>
+
+    جاري تحميل لوحة الإدارة...
+
+  `;
+
+  try{
+
+    const response =
+      await fetch(
+
+        ADMIN_FUNCTION_URL,
+
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              initData:
+                telegram.initData
+
+            })
+
+        }
+
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        "Access denied"
+      );
+
+    }
+
+    document.getElementById(
+      "adminOrders"
+    ).textContent =
+      data.statistics?.total_orders ||
+      0;
+
+    document.getElementById(
+      "adminPaid"
+    ).textContent =
+      data.statistics?.paid_orders ||
+      0;
+
+    document.getElementById(
+      "adminCustomers"
+    ).textContent =
+      data.statistics?.customers ||
+      0;
+
+    document.getElementById(
+      "adminStars"
+    ).textContent =
+      data.statistics?.total_stars ||
+      0;
+
+    const list =
+      document.getElementById(
+        "adminOrdersList"
+      );
+
+    const orders =
+      data.orders || [];
+
+    if(!orders.length){
+
+      list.innerHTML = `
+
+        <div class="admin-empty">
+
+          <div style="
+            font-size:40px;
+            margin-bottom:10px;
+          ">
+            📦
+          </div>
+
+          لا توجد عمليات شراء حتى الآن.
+
+          <div style="
+            margin-top:8px;
+            font-size:11px;
+            color:#666;
+          ">
+            ستظهر الطلبات هنا بعد أول عملية شراء.
+          </div>
+
+        </div>
+
+      `;
+
+    }else{
+
+      list.innerHTML =
+
+        orders.map(
+          order=>{
+
+            const productName =
+              order.product?.name ||
+              order.product?.Name ||
+              "منتج رقمي";
+
+            const status =
+              order.status ||
+              "unknown";
+
+            const statusColor =
+              status === "paid"
+                ? "#7CFC00"
+                : "#ffcc00";
+
+            const date =
+              order.created_at
+                ? new Date(
+                    order.created_at
+                  ).toLocaleString(
+                    "ar-DZ"
+                  )
+                : "";
+
+            return `
+
+              <div class="admin-order">
+
+                <div class="admin-product">
+                  📦 ${productName}
+                </div>
+
+                <div class="admin-order-info">
+                  ⭐ ${order.amount_stars || 0} Stars
+                </div>
+
+                <div class="admin-order-user">
+                  👤 Telegram ID:
+                  ${order.telegram_user_id || "-"}
+                </div>
+
+                <div class="admin-order-date">
+                  🕐 ${date}
+                </div>
+
+                <div
+                  class="admin-order-status"
+                  style="color:${statusColor};"
+                >
+                  ${
+                    status === "paid"
+                      ? "✅ PAID"
+                      : status
+                  }
+                </div>
+
+              </div>
+
+            `;
+
+          }
+        ).join("");
+
+    }
+
+    loading.style.display =
+      "none";
+
+    content.style.display =
+      "block";
+
+  }catch(error){
+
+    console.error(
+      "ADMIN DASHBOARD ERROR:",
+      error
+    );
+
+    loading.innerHTML = `
+
+      <div class="admin-error">
+
+        ❌ ${error.message}
+
+        <br><br>
+
+        <button
+          class="admin-retry"
+          onclick="openAdmin()"
+        >
+          🔄 إعادة المحاولة
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* ================= CLOSE ADMIN ================= */
+
+function closeAdmin(){
+
+  document.getElementById(
+    "adminPanel"
+  ).style.display =
+    "none";
+
+}
+
+
+/* ================= START ADMIN ================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  setupAdminButton
+);
+
+</script>
+
+
+<!-- ADMIN BUTTON -->
+
+<button
+  id="adminOpenButton"
+  class="admin-open-button"
+  onclick="openAdmin()"
+>
+  👑 Admin
+</button>
+
+
+<!-- ADMIN PANEL -->
+
+<div
+  id="adminPanel"
+  class="admin-panel"
+>
+
+  <div class="admin-container">
+
+    <div class="admin-header">
+
+      <div>
+
+        <div class="admin-brand">
+          EMPIRE DIGITAL
+        </div>
+
+        <h1 class="admin-title">
+          👑 Admin Dashboard
+        </h1>
+
+      </div>
+
+      <button
+        class="admin-close"
+        onclick="closeAdmin()"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div
+      id="adminLoading"
+      class="admin-loading"
+    >
+      جاري تحميل البيانات...
+    </div>
+
+    <div
+      id="adminContent"
+      class="admin-content"
+    >
+
+      <div class="admin-stats">
+
+        <div class="admin-stat">
+
+          <div class="admin-stat-label">
+            🛒 الطلبات
+          </div>
+
+          <strong
+            id="adminOrders"
+            class="admin-stat-value"
+          >
+            0
+          </strong>
+
+        </div>
+
+        <div class="admin-stat">
+
+          <div class="admin-stat-label">
+            👥 العملاء
+          </div>
+
+          <strong
+            id="adminCustomers"
+            class="admin-stat-value"
+          >
+            0
+          </strong>
+
+        </div>
+
+        <div class="admin-stat">
+
+          <div class="admin-stat-label">
+            ⭐ Stars
+          </div>
+
+          <strong
+            id="adminStars"
+            class="admin-stat-value admin-stat-stars"
+          >
+            0
+          </strong>
+
+        </div>
+
+        <div class="admin-stat">
+
+          <div class="admin-stat-label">
+            ✅ المدفوع
+          </div>
+
+          <strong
+            id="adminPaid"
+            class="admin-stat-value"
+          >
+            0
+          </strong>
+
+        </div>
+
+      </div>
+
+      <h2 class="admin-orders-title">
+        📦 الطلبات
+      </h2>
+
+      <div
+        id="adminOrdersList"
+      ></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+</body>
+</html>
