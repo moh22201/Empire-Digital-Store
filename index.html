@@ -3854,6 +3854,341 @@ document.addEventListener(
 
 </div>
 
+<!-- AFFILIATE PANEL -->
+<div id="affiliatePanel" style="
+display:none;
+position:fixed;
+inset:0;
+z-index:9999;
+background:#0b0b0b;
+color:#fff;
+overflow-y:auto;
+padding:20px;
+">
 
+  <div style="
+  max-width:600px;
+  margin:auto;
+  background:#151515;
+  border:1px solid #c9a227;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 0 25px rgba(201,162,39,.15);
+  ">
+
+    <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    ">
+      <h2 style="color:#d4af37;margin:0;">
+        🤝 Affiliate
+      </h2>
+
+      <button onclick="closeAffiliate()" style="
+      background:#222;
+      color:#fff;
+      border:1px solid #444;
+      border-radius:10px;
+      padding:8px 12px;
+      font-size:18px;
+      ">✕</button>
+    </div>
+
+    <div id="affiliateLoading" style="
+    text-align:center;
+    color:#aaa;
+    padding:30px;
+    ">
+      جاري تحميل بيانات الشريك...
+    </div>
+
+    <div id="affiliateData" style="display:none;">
+
+      <div style="
+      background:#0f0f0f;
+      border:1px solid #333;
+      border-radius:14px;
+      padding:15px;
+      margin-bottom:15px;
+      ">
+        <div style="color:#aaa;font-size:13px;">
+          كود الشريك
+        </div>
+
+        <div id="affiliateCode" style="
+        color:#d4af37;
+        font-size:25px;
+        font-weight:bold;
+        margin-top:5px;
+        ">
+        </div>
+      </div>
+
+      <div style="
+      background:#0f0f0f;
+      border:1px solid #333;
+      border-radius:14px;
+      padding:15px;
+      margin-bottom:15px;
+      ">
+
+        <div style="color:#aaa;font-size:13px;margin-bottom:8px;">
+          رابط الإحالة
+        </div>
+
+        <div id="affiliateLink" style="
+        font-size:12px;
+        color:#ddd;
+        word-break:break-all;
+        margin-bottom:12px;
+        ">
+        </div>
+
+        <button onclick="copyAffiliateLink()" style="
+        width:100%;
+        background:#d4af37;
+        color:#000;
+        border:0;
+        border-radius:10px;
+        padding:12px;
+        font-weight:bold;
+        ">
+          📋 نسخ رابط الإحالة
+        </button>
+
+        <button onclick="shareAffiliateLink()" style="
+        width:100%;
+        margin-top:8px;
+        background:#222;
+        color:#d4af37;
+        border:1px solid #d4af37;
+        border-radius:10px;
+        padding:12px;
+        font-weight:bold;
+        ">
+          📤 مشاركة الرابط
+        </button>
+
+      </div>
+
+      <div style="
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      ">
+
+        <div class="affiliate-stat">
+          <span>💰 العمولة</span>
+          <strong id="affiliatePercent">0%</strong>
+        </div>
+
+        <div class="affiliate-stat">
+          <span>🛒 المبيعات</span>
+          <strong id="affiliateSales">0</strong>
+        </div>
+
+        <div class="affiliate-stat">
+          <span>⭐ المبيعات</span>
+          <strong id="affiliateSalesStars">0</strong>
+        </div>
+
+        <div class="affiliate-stat">
+          <span>💎 إجمالي العمولة</span>
+          <strong id="affiliateTotal">0 ⭐</strong>
+        </div>
+
+        <div class="affiliate-stat">
+          <span>⏳ معلقة</span>
+          <strong id="affiliatePending">0 ⭐</strong>
+        </div>
+
+        <div class="affiliate-stat">
+          <span>✅ مدفوعة</span>
+          <strong id="affiliatePaid">0 ⭐</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="affiliateNotFound" style="
+    display:none;
+    text-align:center;
+    padding:30px 10px;
+    color:#aaa;
+    ">
+      🤝 حساب الشريك غير موجود أو غير نشط.
+    </div>
+
+  </div>
+</div>
+
+<style>
+.affiliate-stat{
+  background:#0f0f0f;
+  border:1px solid #333;
+  border-radius:14px;
+  padding:14px;
+  text-align:center;
+}
+
+.affiliate-stat span{
+  display:block;
+  color:#aaa;
+  font-size:12px;
+  margin-bottom:8px;
+}
+
+.affiliate-stat strong{
+  display:block;
+  color:#d4af37;
+  font-size:18px;
+}
+</style>
+
+<script>
+let affiliateDashboardData = null;
+
+async function openAffiliate(){
+
+  const panel = document.getElementById("affiliatePanel");
+
+  panel.style.display = "block";
+
+  document.getElementById("affiliateLoading").style.display = "block";
+  document.getElementById("affiliateData").style.display = "none";
+  document.getElementById("affiliateNotFound").style.display = "none";
+
+  const tg = window.Telegram?.WebApp;
+
+  if(!tg || !tg.initData){
+
+    document.getElementById("affiliateLoading").style.display = "none";
+    document.getElementById("affiliateNotFound").style.display = "block";
+
+    return;
+  }
+
+  try{
+
+    const response = await fetch(
+      "https://glgkwcrwytuajlakgawi.supabase.co/functions/v1/affiliate-dashboard",
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+          initData:tg.initData
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    document.getElementById("affiliateLoading").style.display = "none";
+
+    if(!result.success || !result.affiliate){
+
+      document.getElementById("affiliateNotFound").style.display = "block";
+
+      return;
+    }
+
+    affiliateDashboardData = result.data;
+
+    document.getElementById("affiliateCode").textContent =
+      result.data.code;
+
+    document.getElementById("affiliateLink").textContent =
+      result.data.referral_link;
+
+    document.getElementById("affiliatePercent").textContent =
+      result.data.commission_percent + "%";
+
+    document.getElementById("affiliateSales").textContent =
+      result.data.sales_count;
+
+    document.getElementById("affiliateSalesStars").textContent =
+      result.data.sales_stars + " ⭐";
+
+    document.getElementById("affiliateTotal").textContent =
+      result.data.total_commission + " ⭐";
+
+    document.getElementById("affiliatePending").textContent =
+      result.data.pending_commission + " ⭐";
+
+    document.getElementById("affiliatePaid").textContent =
+      result.data.paid_commission + " ⭐";
+
+    document.getElementById("affiliateData").style.display = "block";
+
+  }catch(error){
+
+    console.error(error);
+
+    document.getElementById("affiliateLoading").style.display = "none";
+    document.getElementById("affiliateNotFound").style.display = "block";
+  }
+}
+
+function closeAffiliate(){
+  document.getElementById("affiliatePanel").style.display = "none";
+}
+
+async function copyAffiliateLink(){
+
+  if(!affiliateDashboardData) return;
+
+  const link = affiliateDashboardData.referral_link;
+
+  try{
+
+    await navigator.clipboard.writeText(link);
+
+    alert("تم نسخ رابط الإحالة ✅");
+
+  }catch(error){
+
+    alert(link);
+  }
+}
+
+function shareAffiliateLink(){
+
+  if(!affiliateDashboardData) return;
+
+  const link = affiliateDashboardData.referral_link;
+
+  const text =
+    "🔥 انضم إلى Empire Digital واحصل على خدمات ومنتجات رقمية مميزة:\n\n" +
+    link;
+
+  if(window.Telegram?.WebApp?.openTelegramLink){
+
+    const shareUrl =
+      "https://t.me/share/url?url=" +
+      encodeURIComponent(link) +
+      "&text=" +
+      encodeURIComponent(text);
+
+    window.Telegram.WebApp.openTelegramLink(shareUrl);
+
+  }else{
+
+    window.open(
+      "https://t.me/share/url?url=" +
+      encodeURIComponent(link) +
+      "&text=" +
+      encodeURIComponent(text),
+      "_blank"
+    );
+  }
+}
+</script>
 </body>
 </html>
