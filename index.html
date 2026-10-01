@@ -1593,8 +1593,64 @@ section{
 /* ================= TELEGRAM ================= */
 
 const tg =
-  window.Telegram?.WebApp;
+  window.Telegram?.WebApp; 
+// ===============================
+// Empire Digital - Visitor Tracking
+// ===============================
 
+async function trackStoreVisit() {
+  try {
+    const tgUserId = String(
+      telegram?.initDataUnsafe?.user?.id || ""
+    );
+
+    let visitorId = localStorage.getItem("empireDigitalVisitorId");
+
+    if (!visitorId) {
+      visitorId =
+        "visitor_" +
+        Date.now() +
+        "_" +
+        Math.random().toString(36).substring(2, 12);
+
+      localStorage.setItem(
+        "empireDigitalVisitorId",
+        visitorId
+      );
+    }
+
+    // منع تسجيل نفس فتح الجلسة أكثر من مرة
+    if (sessionStorage.getItem("empireDigitalVisitTracked")) {
+      return;
+    }
+
+    const response = await fetch(
+      "https://glgkwcrwytuajlakgawi.supabase.co/functions/v1/track-visit",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          visitorId: visitorId,
+          telegramUserId: tgUserId
+        })
+      }
+    );
+
+    if (response.ok) {
+      sessionStorage.setItem(
+        "empireDigitalVisitTracked",
+        "1"
+      );
+    }
+
+  } catch (error) {
+    console.log("Visitor tracking error:", error);
+  }
+}
+
+trackStoreVisit();
 if(tg){
 
   tg.ready();
