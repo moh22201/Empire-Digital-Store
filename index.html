@@ -2214,7 +2214,9 @@ const tg =
    VISITOR TRACKING
    ========================================================= */
 
-async function trackStoreVisit(){
+async function setTimeout(() => {
+  trackStoreVisit();
+}, 1000);
 
   try{
 
